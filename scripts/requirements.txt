@@ -1,0 +1,7 @@
+pandas
+argparse
+tensorflow
+
+##See if the tensorflow will work with current python, 
+##otherwise may need to upgrade python or tensorflow or both,
+##will that impact functionality??
