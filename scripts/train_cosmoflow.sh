@@ -12,6 +12,7 @@ conda create -n COSMOFLOW python=3.8
 conda activate COSMOFLOW
 pip install -r requirements.txt
 
+export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
 export OMP_NUM_THREADS=32
 export KMP_BLOCKTIME=1
 export KMP_AFFINITY="granularity=fine,compact,1,0"
