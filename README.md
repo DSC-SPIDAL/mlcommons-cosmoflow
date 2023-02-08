@@ -81,17 +81,33 @@ We need to copy the content of hpc cosmoflow into our cosmoflow
 
 ## Data Preparation
 
-Download the data from <https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/>
+The data for this program is located at 
 
-Small data file: <https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/cosmoUniverse_2019_05_4parE_tf_small.tgz>
-To download this dataset use the linux command: 
+* <https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/>
 
-```bash 
-rivanna> mkdir $PROJECT/data
-rivanna> cd $PROJECT/data
-rivanna> time wget -bqc https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/cosmoUniverse_2019_05_4parE_tf_small.tgz
-rivanna> time tar -xvf cosmoUniverse_2019_05_4parE_tf_small.tgz
+We provide a convenient way to download the data via the Makefile. 
+We download two data sets, a small and a large one. To download both simply 
+say 
+
+```bash
+rivanna> make get-data
+```
+
+However, this may 
+
+```bash
 rivanna> cd $PROJECT
+rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-data
+```
+
+The download of all data takes ?? seconds./
+The uncompression of that data takes ?? seconds.
+
+In case you only like to get the small data set use
+
+```bash
+rivanna> cd $PROJECT
+rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-small-data
 ```
 
 The download command takes about 4 seconds to execute on Rivanna.
@@ -103,16 +119,23 @@ This will be creating two directories called:
 
 Together this will take up a total of 1.1 GB of space.
 
-Large data file: <https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/cosmoUniverse_2019_05_4parE_tf_v2.tar>
-To download the dataset use the linux command:
+
+In case you only like to get the large dataset use
 
 ```bash
-rivanna> time wget -bqc https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/cosmoUniverse_2019_05_4parE_tf_v2.tar & 
-rivanna> time tar -xvf cosmoUniverse_2019_05_4parE_tf_v2.tar
+rivanna> cd $PROJECT
+rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-large-data
 ```
 
-The download command takes about ? seconds to execute on Rivanna.
-The uncompress command takes about ? seconds to execute on Rivanna.
+The download of the large data takes about ? seconds to execute on Rivanna.
+The uncompress of the large data takes about ? seconds to execute on Rivanna.
+
+Once the make file targets are uncompressed you will find the data in the directory 
+`$PROJECT/data`. With the following subdirectories
+
+* small data is in: `TODO`
+* large data is in: `TODO`
+
 
 
 ## Set up Python via Miniforge and Conda
