@@ -19,8 +19,8 @@ export KMP_AFFINITY="granularity=fine,compact,1,0"
 export HDF5_USE_FILE_LOCKING=FALSE
 
 set -x
-srun -l -u python ../cosmoflow/train.py \
-    --config=../configs/cosmo.yaml \
+srun -l -u python $PROJECT/mlcommons-cosmoflow/cosmoflow/train.py \
+    --config=$PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo.yaml \
     --kmp-blocktime=$KMP_BLOCKTIME \
     --kmp-affinity=$KMP_AFFINITY \
     --omp-num-threads=$OMP_NUM_THREADS \

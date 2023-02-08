@@ -1,7 +1,9 @@
+tensorflow==1.15.2
 pandas
 argparse
-tensorflow
 
 ##See if the tensorflow will work with current python, 
 ##otherwise may need to upgrade python or tensorflow or both,
 ##will that impact functionality??
+
+##Pandas and tensorflow have diff requirements, look into this
