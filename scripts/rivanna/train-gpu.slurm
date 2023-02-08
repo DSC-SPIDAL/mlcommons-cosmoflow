@@ -7,9 +7,10 @@
 #SBATCH -c 4
 #SBATCH --partition=bii-gpu
 #SBATCH --reservation=bi_fox_dgx
-#SBATCH --account=bii_dsc_community
+#SBATCH --account=bii_dsc
+#SBATCH --constraint=a100_80gb
 #SBATCH --mem=32GB
-#SBATCH --gres=gpu:v100:1
+#SBATCH --gres=gpu:a100:1
 
 module load anaconda
 conda -V    # 4.9.2
