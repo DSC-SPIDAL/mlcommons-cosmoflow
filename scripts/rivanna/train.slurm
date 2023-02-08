@@ -1,9 +1,15 @@
 #!/bin/bash
 #SBATCH -q debug
-#SBATCH -t 30
-#SBATCH -J train-cosmoflow
-#SBATCH -p bii
+#SBATCH --time=30
+#SBATCH --job-name=train-cosmoflow
+#SBATCH --output=%u-%j.out
+#SBATCH --error=%u-%j.err
 #SBATCH -c 4
+#SBATCH --partition=bii-gpu
+#SBATCH --reservation=bi_fox_dgx
+#SBATCH --account=bii_dsc_community
+#SBATCH --mem=32GB
+#SBATCH --gres=gpu:1
 
 module load anaconda
 conda -V    # 4.9.2
