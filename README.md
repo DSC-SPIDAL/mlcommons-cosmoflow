@@ -3,7 +3,20 @@
 Authors:
 Gregor von Laszewski, Varun Pavuloori
 
+
+## WARNING
+
+---
+
+***UNDER NO CIRCUMSTANCES 
+say `conda init` even
+if conda tells you to do that.It will mess up your environment !!!!!!!!!!!!!!!!!!!!!***. 
+
+---
 ## TODO Tasks
+
+
+
 
 Tasks:
 
@@ -46,6 +59,8 @@ TODO: fill in the ?? after ticket resolves
  * `??` and `??`
  
  for running future scripts.
+
+See Gregors e-mail.
 
 ### Set up a Project Directory to get the Code
 

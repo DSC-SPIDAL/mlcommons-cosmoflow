@@ -33,11 +33,12 @@ srun -l -u python $PROJECT/mlcommons-cosmoflow/cosmoflow/train.py \
     --omp-num-threads=$OMP_NUM_THREADS \
     -d $@
 
-    ##documentation to set up srun statements so I dont have to keep modifying the train.py file
+## documentation to set up srun statements so I dont have
+## to keep modifying the train.py file
 
+## What does the -d do? look into
+## --config=../configs/cosmo.yaml to specify configs
+## -d could do a couple of things:
+## specify a debug level or specify dependencies,
+## the $@ is every command line argument given to the shell
 
-##What does the -d do? look into --config=../configs/cosmo.yaml to specify configs
-## -d could do a couple of things: specify a debug level or specify dependencies, the $@ is every command line argument given to the shell
-
-## -u shifter makes it so the output is unbuffered
-## look into shifter - documentation under hpc shifter
