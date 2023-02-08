@@ -5,7 +5,7 @@
 #SBATCH --output=%u-%j.out
 #SBATCH --error=%u-%j.err
 #SBATCH -c 4
-#SBATCH --partition=bii
+#SBATCH --partition=bii-gpu
 #SBATCH --reservation=bi_fox_dgx
 #SBATCH --account=bii_dsc_community
 #SBATCH --mem=32GB
