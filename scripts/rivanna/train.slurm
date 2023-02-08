@@ -9,7 +9,7 @@
 #SBATCH --reservation=bi_fox_dgx
 #SBATCH --account=bii_dsc_community
 #SBATCH --mem=32GB
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:v100:1
 
 module load anaconda
 conda -V    # 4.9.2
