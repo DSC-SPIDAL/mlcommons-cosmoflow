@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -q debug
+
 #SBATCH --time=30
 #SBATCH --job-name=train-cosmoflow
 #SBATCH --output=%u-%j.out
