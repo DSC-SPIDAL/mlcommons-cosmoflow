@@ -140,6 +140,8 @@ Once the make file targets are uncompressed you will find the data in the direct
 
 ## Set up Python via Miniforge and Conda
 
+TODO: think about creating a variable for tensorflow var.
+
 gregors version of this
 
 ```bash

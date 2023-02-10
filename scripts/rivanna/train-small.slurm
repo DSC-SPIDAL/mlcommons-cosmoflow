@@ -15,8 +15,8 @@
 module load anaconda
 conda -V    # 4.9.2
 anaconda -V # 1.7.2
-conda create -n COSMOFLOW python=3.8
-conda activate COSMOFLOW
+conda create -n COSMOFLOW2 python=3.8
+conda activate COSMOFLOW2
 
 export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
 export OMP_NUM_THREADS=32
