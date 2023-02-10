@@ -3,42 +3,42 @@
 #
 
 create-data-dir:
-	mkdir -p $PROJECT/data
+	mkdir -p $(PROJECT)/data
 
 get-data: get-small-data get-large-data
 
 get-small-data: create-data-dir
-	cd $PROJECT/data; \
+	cd $(PROJECT)/data; \
     time wget -bqc https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/cosmoUniverse_2019_05_4parE_tf_small.tgz; \
     time tar -xvf cosmoUniverse_2019_05_4parE_tf_small.tgz
 
 get-large-data: create-data-dir
-	cd $PROJECT/data; \
+	cd $(PROJECT)/data; \
 	time wget -bqc https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/cosmoUniverse_2019_05_4parE_tf_v2.tar; \
 	time tar -xvf cosmoUniverse_2019_05_4parE_tf_v2.tar
 
 squeue:
-	squeue -u $USER
+	squeue -u $(USER)
 
 run-small-data:
-	cd $PROJECT/results; rm *.err *.out
-	cd $PROJECT/results; sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-small.slurm
+	cd $(PROJECT)/results; rm *.err *.out
+	cd $(PROJECT)/results; sbatch $(PROJECT)/mlcommons-cosmoflow/scripts/rivanna/train-small.slurm
 	echo
 	echo "ERROR"
 	echo 
-	cat $PROJECT/results/*.err
+	cat $(PROJECT)/results/*.err
 	echo
 	echo "OUT"
 	echo
-	cat $PROJECT/results/*.out
+	cat $(PROJECT)/results/*.out
 	
 run-large-data:
-	cd $PROJECT/results; sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-large.slurm
+	cd $(PROJECT)/results; sbatch $(PROJECT)/mlcommons-cosmoflow/scripts/rivanna/train-large.slurm
 	echo
 	echo "ERROR"
 	echo 
-	cat $PROJECT/results/*.err
+	cat $(PROJECT)/results/*.err
 	echo
 	echo "OUT"
 	echo
-	cat $PROJECT/results/*.out
+	cat $(PROJECT)/results/*.out
