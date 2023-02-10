@@ -27,7 +27,7 @@ export HDF5_USE_FILE_LOCKING=FALSE
 
 set -x
 srun -l -u python $PROJECT/mlcommons-cosmoflow/cosmoflow/train.py \
-    --config=$PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo.yaml \
+    --config=$PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml \
     --kmp-blocktime=$KMP_BLOCKTIME \
     --kmp-affinity=$KMP_AFFINITY \
     --omp-num-threads=$OMP_NUM_THREADS \
