@@ -23,7 +23,22 @@ squeue:
 run-small-data:
 	cd $PROJECT/results; rm *.err *.out
 	cd $PROJECT/results; sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-small.slurm
-
+	echo
+	echo "ERROR"
+	echo 
+	cat $PROJECT/results/*.err
+	echo
+	echo "OUT"
+	echo
+	cat $PROJECT/results/*.out
+	
 run-large-data:
 	cd $PROJECT/results; sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-large.slurm
-
+	echo
+	echo "ERROR"
+	echo 
+	cat $PROJECT/results/*.err
+	echo
+	echo "OUT"
+	echo
+	cat $PROJECT/results/*.out
