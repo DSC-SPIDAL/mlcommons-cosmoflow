@@ -173,8 +173,11 @@ DO NOT USE CONDA INIT!!!!!
 ```bash
 rivanna> mkdir -p $PROJECT/results
 rivanna> cd $PROJECT/results
-rivanna> sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train.slurm
+rivanna> sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-small.slurm
+rivanna> squeue -u $USER
 ```
+
+The squeue command will give you the jobid and the status of the submitted script.
 
 
 ## Interacting with Rivanna
