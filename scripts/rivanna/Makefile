@@ -21,8 +21,9 @@ squeue:
 	squeue -u $USER
 
 run-small-data:
-	sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-small.slurm
+	cd $PROJECT/results; rm *.err *.out
+	cd $PROJECT/results; sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-small.slurm
 
 run-large-data:
-	sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-large.slurm
+	cd $PROJECT/results; sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-large.slurm
 
