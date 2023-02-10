@@ -17,13 +17,14 @@ conda -V    # 4.9.2
 anaconda -V # 1.7.2
 conda create -n COSMOFLOW python=3.8
 conda activate COSMOFLOW
-pip install -r requirements.txt
 
 export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
 export OMP_NUM_THREADS=32
 export KMP_BLOCKTIME=1
 export KMP_AFFINITY="granularity=fine,compact,1,0"
 export HDF5_USE_FILE_LOCKING=FALSE
+
+pip install -r $PROJECT/mlcommons-cosmoflow/scripts/rivanna/requirements.txt
 
 set -x
 srun -l -u python $PROJECT/mlcommons-cosmoflow/cosmoflow/train.py \
