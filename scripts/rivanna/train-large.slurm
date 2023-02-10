@@ -24,7 +24,7 @@ export KMP_BLOCKTIME=1
 export KMP_AFFINITY="granularity=fine,compact,1,0"
 export HDF5_USE_FILE_LOCKING=FALSE
 
-pip install -r $PROJECT/mlcommons-cosmoflow/scripts/rivanna/requirements.txt
+##pip install -r $PROJECT/mlcommons-cosmoflow/scripts/rivanna/requirements.txt
 
 set -x
 srun -l -u python $PROJECT/mlcommons-cosmoflow/cosmoflow/train.py \
