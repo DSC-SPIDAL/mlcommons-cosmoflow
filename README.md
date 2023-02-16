@@ -45,7 +45,32 @@ cd $PROJECT
 make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-small-data
 ```
 
+macos
 
+```
+pip3 install --upgrade pip
+
+brew install bazel nano .bazelversion # change to 4.2.0 cat .bazelversion # == 4.2.0 bazel --version # == 4.2.0
+
+git clone https://github.com/tensorflow/tensorflow.git cd tensorflow #git checkout master #git pull --rebase
+
+./configure
+
+bazel build --config=macos_arm64 tensorflow/tools/pip_package:build_pip_package
+
+./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
+
+Result in: /System/Volumes/Data/private/tmp/tensorflow_pkg/
+
+tensorflow-2.7.0-cp39-cp39-macosx_12_0_arm64.whl
+
+pip install *.whl
+
+To get GPU support, we need to install the new Pluggable Device: https://pypi.org/project/tensorflow-metal/#files
+
+python3 -m pip install tensorflow-metal # 0.1.2
+
+```
 
 ## TODO Tasks
 
