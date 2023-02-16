@@ -17,6 +17,55 @@ It will mess up your environment !!!!!!!!!!!!!!!!!!!!!***.
 
 ## Gregors notes
 
+---
+
+### Linux
+
+
+
+
+```
+sudo snap install cmake --classic
+sudo apt update && sudo apt upgrade
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt install python3.8
+sudo apt install python3.8-venv
+python3.8 -V
+# Python 3.8.16
+source ~/TF/bin/activate
+```
+
+MPI
+
+```
+wget https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.0.tar.gz
+tar -xzvf openmpi-4.0.0.tar.gz
+cd openmpi-4.0.0
+./configure --prefix=/usr/local --with-cuda
+sudo make all install
+sudo ldconfig
+```
+
+tensorflow, horovod and cosmoflow
+
+```bash
+mkdir cosmo
+cd cosmo/
+export PROJECT=`pwd`
+cd $PROJECT
+git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git
+git clone https://github.com/mlcommons/hpc.git
+make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-small-data
+pip install -r $PROJECT/mlcommons-cosmoflow/scripts/rivanna/requirements.txt 
+# HOROVOD_WITH_TENSORFLOW=1 pip install --no-cache-dir horovod
+pip install --no-cache-dir horovod
+```
+
+---
+
+
+
 set up env
 
 ```bash
