@@ -1,0 +1,4 @@
+tensorflow-macos
+pandas
+argparse
+pyyaml
