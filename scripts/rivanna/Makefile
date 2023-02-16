@@ -1,6 +1,11 @@
 #
 # Targets to fetch the data
 #
+PROJECT=/project/bii_dsc_community/$(USER)
+
+info:
+	echo "user:" $(USER)
+	echor "project:" $(PROJECT)
 
 create-data-dir:
 	mkdir -p $(PROJECT)/data
