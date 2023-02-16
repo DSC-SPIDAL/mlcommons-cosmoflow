@@ -20,7 +20,7 @@ get-small-data: create-data-dir
 	cd $(DATA); \
 	time wget -bqc https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/cosmoUniverse_2019_05_4parE_tf_small.tgz
 	cd $(DATA); \
-	time tar zxvfz cosmoUniverse_2019_05_4parE_tf_small.tgz
+	time tar zxvf cosmoUniverse_2019_05_4parE_tf_small.tgz
 
 get-large-data: create-data-dir
 	cd $($DATA); \
