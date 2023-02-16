@@ -10,27 +10,28 @@ Gregor von Laszewski, Varun Pavuloori
 
 ***UNDER NO CIRCUMSTANCES 
 say `conda init` even
-if conda tells you to do that.It will mess up your environment !!!!!!!!!!!!!!!!!!!!!***. 
+if conda tells you to do that. 
+It will mess up your environment !!!!!!!!!!!!!!!!!!!!!***. 
 
 ---
+
 ## TODO Tasks
-
-
 
 
 Tasks:
 
-Main Task: clean up the readme file
-  -include a section to uninstall python env
-    -(the conda deactivate COSMOFLOW)
-  -in the future take the TODO tasks out of the readme so that its super clean for anyone to run it
+* Main Task: clean up the readme file
+  * include a section to uninstall python env
+    * (the conda deactivate COSMOFLOW)
+  * in the future take the TODO tasks out of the readme so that its super clean for anyone to run it
 
 Time the wget for the large dataset in the data dir in $PROJECT
 
-figure out conda(NEVER USE CONDA INIT!!!!!!!!!!!!!)
+figure out conda (NEVER USE CONDA INIT!!!!!!!!!!!!!)
   conda create
 
-some program uses a diff version of numpy: Tensorflow 2.11.0 requires numpy>=1.20, but you'll have numpy 1.19.2 which is incompatible.
+Some program uses a diff version of numpy: Tensorflow 2.11.0 
+requires numpy>=1.20, but you'll have numpy 1.19.2 which is incompatible.
 Update cosmoflow to tensorflow 2.11.0 from 1.15.2
 
 
