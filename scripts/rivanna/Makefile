@@ -1,9 +1,11 @@
 #
 # Targets to fetch the data
 #
+
 PROJECT=/project/bii_dsc_community/$(USER)/cosmoflow
 DATA=$(PROJECT)/data
 RESULT=$(PROJECT)/result
+
 
 info:
 	echo "user:" $(USER)
