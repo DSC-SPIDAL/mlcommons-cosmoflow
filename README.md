@@ -32,7 +32,6 @@ set up prg
 export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
 mkdir -p $PROJECT
 cd $PROJECT
-cd bii_dsc_community/$USER
 git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git
 cd mlcommons-cosmoflow/
 # git pull
