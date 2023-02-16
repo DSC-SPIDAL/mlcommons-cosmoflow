@@ -32,8 +32,6 @@ figure out conda (NEVER USE CONDA INIT!!!!!!!!!!!!!)
 
 Some program uses a diff version of numpy: Tensorflow 2.11.0 
 requires numpy>=1.20, but you'll have numpy 1.19.2 which is incompatible.
-Update cosmoflow to tensorflow 2.11.0 from 1.15.2
-
 
 ## Table of contents
 
