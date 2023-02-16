@@ -39,6 +39,7 @@ export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
 mkdir -p $PROJECT
 cd $PROJECT
 git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git
+git clone https://github.com/mlcommons/hpc.git
 cd mlcommons-cosmoflow/
 # git pull
 cd $PROJECT
@@ -50,35 +51,43 @@ make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-small-data
 pip install -r $PROJECT/mlcommons-cosmoflow/scripts/rivanna/requirements.txt 
 ```
 
-macos does not work
+macos not yet tested
 
 
 ```
-pip3 install --upgrade pip
+brew install cmake
+brew install open-mpi
+brew install python@3.8
+brew install libuv # for horovod
+/opt/homebrew/Cellar/python@3.8/3.8.16/bin/python3.8  -m venv ~/TF
+source ~/TF/bin/activate
+pip install --upgrade pip
+pip install tensorflow-macos
+HOROVOD_WITHOUT_MPI=1 HOROVOD_WITH_TENSORFLOW=1 pip install --no-cache-dir horovod
+```
 
-brew install bazel nano .bazelversion # change to 4.2.0 cat .bazelversion # == 4.2.0 bazel --version # == 4.2.0
+check
 
-git clone https://github.com/tensorflow/tensorflow.git
-cd tensorflow
-#git checkout master
-#git pull --rebase
+```
+python 
+Python 3.8.16 (default, Dec  7 2022, 01:27:54) 
+[Clang 14.0.0 (clang-1400.0.29.202)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import tensorflow
+>>> tensorflow.__version__
+'2.11.0'
+```
 
-./configure
+```bash
+time pip install -r $PROJECT/mlcommons-cosmoflow/scripts/macos/requirements.txt
+```
 
-bazel build --config=macos_arm64 tensorflow/tools/pip_package:build_pip_package
+```
+make -f mlcommons-cosmoflow/scripts/macos/Makefile run-small-data
+ERROR
 
-./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
-
-Result in: /System/Volumes/Data/private/tmp/tensorflow_pkg/
-
-tensorflow-2.7.0-cp39-cp39-macosx_12_0_arm64.whl
-
-pip install /System/Volumes/Data/private/tmp/tensorflow_pkg/*.whl
-
-To get GPU support, we need to install the new Pluggable Device: https://pypi.org/project/tensorflow-metal/#files
-
-python3 -m pip install tensorflow-metal # 0.1.2
-
+tensorflow.python.framework.errors_impl.NotFoundError: dlopen(/Users/USER/TF/lib/python3.8/site-packages/horovod/tensorflow/mpi_lib.cpython-38-darwin.so, 0x0006): weak-def symbol not found '__ZN3xla14HloInstruction5VisitIPKS0_EEN3tsl6StatusEPNS_17DfsHloVisitorBaseIT_EE'
+make: *** [run-small-data] Error 1
 ```
 
 ## TODO Tasks
@@ -225,7 +234,7 @@ rivanna> module load anaconda
 rivanna> conda -V    # 4.9.2
 rivanna> anaconda -V # 1.7.2
 rivanna> conda activate COSMOFLOW
-rivanna> time pip install -r $PROJECT/mlcommons-cosmoflow/scripts/requirements.txt
+rivanna> time pip install -r $PROJECT/mlcommons-cosmoflow/scripts/rivanna/requirements.txt
 ```
 
 The pip command will take 2 seconds. 
