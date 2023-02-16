@@ -45,6 +45,9 @@ cd $PROJECT
 make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-small-data
 ```
 
+```bash
+pip install -r $PROJECT/mlcommons-cosmoflow/scripts/rivanna/requirements.txt 
+```
 
 
 ## TODO Tasks
