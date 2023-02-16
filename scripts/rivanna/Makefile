@@ -1,7 +1,7 @@
 #
 # Targets to fetch the data
 #
-PROJECT=/project/bii_dsc_community/$(USER)
+# PROJECT=/project/bii_dsc_community/$(USER)
 
 info:
 	echo "user:" $(USER)
