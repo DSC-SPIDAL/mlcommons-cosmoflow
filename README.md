@@ -45,6 +45,7 @@ cd openmpi-4.0.0
 ./configure --prefix=/usr/local --with-cuda
 sudo make all install
 sudo ldconfig
+cd ..
 ```
 
 tensorflow, horovod and cosmoflow
@@ -56,8 +57,8 @@ export PROJECT=`pwd`
 cd $PROJECT
 git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git
 git clone https://github.com/mlcommons/hpc.git
-make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-small-data
-pip install -r $PROJECT/mlcommons-cosmoflow/scripts/rivanna/requirements.txt 
+make -f mlcommons-cosmoflow/scripts/ubuntu/Makefile get-small-data
+pip install -r $PROJECT/mlcommons-cosmoflow/scripts/ubuntu/requirements.txt 
 # HOROVOD_WITH_TENSORFLOW=1 pip install --no-cache-dir horovod
 pip install --no-cache-dir horovod
 ```
