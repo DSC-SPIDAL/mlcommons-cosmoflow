@@ -15,6 +15,21 @@ It will mess up your environment !!!!!!!!!!!!!!!!!!!!!***.
 
 ---
 
+## Gregors notes
+
+```bash
+resize # set terminal width and hight
+reset  # make sure you start with fresh window may have to add to .bashrc
+
+export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
+mkdir -p $PROJECT
+cd $PROJECT
+cd bii_dsc_community/$USER
+git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git
+cd mlcommons-cosmoflow/
+# git pull
+```
+
 ## TODO Tasks
 
 
