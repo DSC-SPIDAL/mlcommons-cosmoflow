@@ -19,10 +19,9 @@ It will mess up your environment !!!!!!!!!!!!!!!!!!!!!***.
 
 ---
 
-### Linux
+### Ubuntu
 
-
-
+First install Python 3.8
 
 ```
 sudo snap install cmake --classic
@@ -36,7 +35,7 @@ python3.8 -V
 source ~/TF/bin/activate
 ```
 
-MPI
+Next install MPI from source
 
 ```
 wget https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.0.tar.gz
@@ -48,7 +47,7 @@ sudo ldconfig
 cd ..
 ```
 
-tensorflow, horovod and cosmoflow
+Now install  tensorflow, horovod and cosmoflow
 
 ```bash
 mkdir cosmo
@@ -63,18 +62,40 @@ pip install -r $PROJECT/mlcommons-cosmoflow/scripts/ubuntu/requirements.txt
 pip install --no-cache-dir horovod
 ```
 
+Now you have a working environment (hopefully, e.g. not yet tested)
+
+to run the program say
+
+```bash
+make -f mlcommons-cosmoflow/scripts/ubuntu/Makefile run-small-data
+```
+
+This will give now an error in loading data. it seems the configuration is wrong?
+
+```
+2023-02-16 10:07:47,398 INFO Loading data
+Traceback (most recent call last):
+  File "/home/green/cosmo/hpc/cosmoflow/train.py", line 395, in <module>
+    main()
+  File "/home/green/cosmo/hpc/cosmoflow/train.py", line 282, in main
+    datasets = get_datasets(dist=dist, **data_config)
+  File "/home/green/cosmo/hpc/cosmoflow/data/__init__.py", line 39, in get_datasets
+    return get_datasets(**data_args)
+  File "/home/green/cosmo/hpc/cosmoflow/data/cosmo.py", line 207, in get_datasets
+    train_dataset, n_train_steps = construct_dataset(
+  File "/home/green/cosmo/hpc/cosmoflow/data/cosmo.py", line 108, in construct_dataset
+    assert (0 <= n_files) and (n_files <= len(filenames)), (
+AssertionError: Requested 524288 files, 32 available
+make: *** [mlcommons-cosmoflow/scripts/ubuntu/Makefile:39: run-small-data] Error 1
+```
+ 
+
+
+
 ---
 
 
-
-set up env
-
-```bash
-resize # set terminal width and hight
-reset  # make sure you start with fresh window may have to add to .bashrc
-eval `ssh-agent`
-ssh-add
-```
+### macOS M1
 
 set up prg
 
@@ -139,6 +160,17 @@ ERROR
 tensorflow.python.framework.errors_impl.NotFoundError: dlopen(/Users/USER/TF/lib/python3.8/site-packages/horovod/tensorflow/mpi_lib.cpython-38-darwin.so, 0x0006): weak-def symbol not found '__ZN3xla14HloInstruction5VisitIPKS0_EEN3tsl6StatusEPNS_17DfsHloVisitorBaseIT_EE'
 make: *** [run-small-data] Error 1
 ```
+
+### Rivana
+
+Set up te teminal as follows so you can have propper width and also ssh in case we need to use git 
+```bash
+resize # set terminal width and hight
+reset  # make sure you start with fresh window may have to add to .bashrc
+eval `ssh-agent`
+ssh-add
+```
+
 
 ## TODO Tasks
 
