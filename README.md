@@ -161,9 +161,10 @@ tensorflow.python.framework.errors_impl.NotFoundError: dlopen(/Users/USER/TF/lib
 make: *** [run-small-data] Error 1
 ```
 
-### Rivana
+### Rivanna
 
-Set up te teminal as follows so you can have propper width and also ssh in case we need to use git 
+
+Set up the teminal as follows so you can have proper width and also ssh in case we need to use git 
 ```bash
 resize # set terminal width and hight
 reset  # make sure you start with fresh window may have to add to .bashrc
