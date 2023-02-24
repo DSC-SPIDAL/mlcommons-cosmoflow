@@ -2,7 +2,7 @@
 
 ## Pulling the image
 
-To get the sif image you must run the following commands in Rivanna
+To get the sif image you must run the following commands in Rivanna in the $PROJECT directory
 
 ```
 rivanna> mkdir dockerIMG
