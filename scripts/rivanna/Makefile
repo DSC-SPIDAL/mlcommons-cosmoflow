@@ -3,9 +3,9 @@
 #
 
 # PROJECT=/project/bii_dsc_community/$(USER)/cosmoflow
-DATA=$(PROJECT)/data
 RESULT=$(PROJECT)/result
-
+PROJECT=/scratch/$(USER)/cosmoflow
+DATA=/scratch/$(USER)/cosmoflow/data
 
 info:
 	echo "user:" $(USER)

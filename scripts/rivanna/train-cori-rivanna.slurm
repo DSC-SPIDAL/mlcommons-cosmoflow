@@ -1,17 +1,23 @@
-#!/usr/bin/env bash
-#SBATCH -J tftest
-#SBATCH -o tftest-%A.out
-#SBATCH -e tftest-%A.err
-#SBATCH -p gpu
-#SBATCH --gres=gpu:1
-#SBATCH -c 1
-#SBATCH -t 00:01:00
-#SBATCH -A mygroup
+#!/bin/bash
+#SBATCH --time=30
+#SBATCH --job-name=train-cosmoflow
+#SBATCH --output=%u-%j.out
+#SBATCH --error=%u-%j.err
+#SBATCH -c 4
+#SBATCH --partition=bii-gpu
+#SBATCH --reservation=bi_fox_dgx
+#SBATCH --account=bii_dsc_community
+#SBATCH --constraint=a100_80gb
+#SBATCH --mem=32GB
+#SBATCH --gres=gpu:a100:1
 
 module purge
 module load singularity
 
-singularity pull docker://sfarrell/cosmoflow-gpu:mlperf-v1.0
+## singularity pull docker://sfarrell/cosmoflow-gpu:mlperf-v1.0
 
-containerdir=~
-singularity run --nv $containerdir/tensorflow-2.1.0-py37.sif tensorflowtest.py
+export SIF_DIR=/scratch/$USER/cosmoflow
+export USER_CONTAINER_DIR=/scratch/$USER/.singularity
+cd $SIF_DIR
+
+singularity run --nv $USER_CONTAINER_DIR/cosmoflow-gpu_mlperf-v1.0.sif train.py
