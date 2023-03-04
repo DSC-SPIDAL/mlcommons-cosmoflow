@@ -3,8 +3,36 @@
 Authors:
 Gregor von Laszewski, Varun Pavuloori
 
+# TODO Tasks
 
-## WARNING
+Tasks:
+
+* Main Task: clean up the readme file
+  * include a section to uninstall python env
+    * (the conda deactivate COSMOFLOW)
+  * in the future take the TODO tasks out of the readme so that its super clean for anyone to run it
+
+Time the wget for the large dataset in the data dir in $PROJECT
+
+figure out conda (NEVER USE CONDA INIT!!!!!!!!!!!!!)
+  conda create
+
+## Table of contents
+
+TODO: complete with a good organizational structure
+
+1. [Setup -WIP-](#gregors-notes-for-setup)
+2. [Installing Rivanna](#install-on-rivanna)
+
+   1. [Setting up the Project Directory and Getting the code](#set-up-a-project-directory-to-get-the-code)
+   2. [Data Preparation](#data-preparation)
+   3. [Set up Python via Miniforge and Conda](#set-up-python-via-miniforge-and-conda)
+   4. [Job Info](#interacting-with-rivanna)
+
+3. [Running Scripts](#running-scripts)
+
+
+## FUTURE WARNING
 
 ---
 
@@ -15,7 +43,7 @@ It will mess up your environment !!!!!!!!!!!!!!!!!!!!!***.
 
 ---
 
-## Gregors notes
+## Gregors notes for setup
 
 ---
 
@@ -172,36 +200,6 @@ eval `ssh-agent`
 ssh-add
 ```
 
-
-## TODO Tasks
-
-
-Tasks:
-
-* Main Task: clean up the readme file
-  * include a section to uninstall python env
-    * (the conda deactivate COSMOFLOW)
-  * in the future take the TODO tasks out of the readme so that its super clean for anyone to run it
-
-Time the wget for the large dataset in the data dir in $PROJECT
-
-figure out conda (NEVER USE CONDA INIT!!!!!!!!!!!!!)
-  conda create
-
-Some program uses a diff version of numpy: Tensorflow 2.11.0 
-requires numpy>=1.20, but you'll have numpy 1.19.2 which is incompatible.
-
-## Table of contents
-
-TODO: complete with a good organizational structure
-
-1. [Installing Rivanna](#install-on-rivanna)
-
-   1. [Setting up the Project Directory and Getting the code](#set-up-a-project-directory-to-get-the-code)
-   2. [Data Preparation](#data-preparation)
-   3. [Set up Python via Miniforge and Conda](#set-up-python-via-miniforge-and-conca)
-
-
 ## Install on Rivanna
 
 We will run Cosmoflow benchmark on Rivanna, in the group `bii_dsc_community` and the directory:
@@ -322,10 +320,39 @@ rivanna> time pip install -r $PROJECT/mlcommons-cosmoflow/scripts/rivanna/requir
 
 The pip command will take 2 seconds. 
 
-DO NOT USE CONDA INIT!!!!!
+As a reminder, DO NOT USE CONDA INIT!!!!!
+
+## Interacting with Rivanna
+
+Rivanna has two brimary modes so users can interact with it. 
+
+* **Interactive Jobs:** The first one are interactive jobs that allow you to 
+  reserve a node on rivanna so it looks like a login node. This interactive mode is
+  usefull only during the debug phase and can serve as a convenient way to quickly create 
+  batch scripts that are run in the second mode. This is useful for when you need a large amount
+  of resources to be allocated to your job. It can be accessed using the following line:
+
+  ```bash
+  rivanna> ijob -c 1 -p largemem --time=1-00:00:00
+  ```
+
+  In the above command, the parameter next to "-c" indicates the number of cores, "-p" is the partition, 
+  and time is the length of allocation.
+
+*  **Batch Jobs:** The second mode is a batch job that is controlled by a batch script. 
+   We will showcase here how to set such scripts up and use them, and you can view examples of them 
+   by locating scripts > rivanna > train-cori-rivanna.slurm
+
+   The sbatch parameters and what they control can be found at this website:
+   <https://www.rc.virginia.edu/userinfo/rivanna/slurm/>
 
 
-## THE FOLLOWING IS NOT LOOKED AT YET!!!!!!
+## Running scripts
+
+Before running scripts, make sure you have already gotten the singularity image via a sif file
+Details of which can be found in README-singularity.md in this repo.
+
+After finishing the instructions use these steps to set up a results directory and run your script
 
 ```bash
 rivanna> mkdir -p $PROJECT/results
@@ -336,19 +363,7 @@ rivanna> squeue -u $USER
 
 The squeue command will give you the jobid and the status of the submitted script.
 
-
-## Interacting with Rivanna
-
-Rivanna has two brimary modes so users can interact with it. 
-
-* **Interactive Jobs:** The first one are interactive jobs that allow you to 
-  reserve a node on rivanna so it looks like a login node. This interactive mode is
-  usefull only during the debug phase and can serve as a convenient way to quickly create 
-  batch scripts that are run in the second mode.
-
-*  **Batch Jobs:** The second mode is a batch job that is controlled by a batch script. 
-   We will showcase here how to set such scripts up and use them 
-
+TODO: include a section about importing the scripts from hpc into a directory to be accessed by the script.
 
 ## References
 
@@ -359,3 +374,4 @@ Rivanna has two brimary modes so users can interact with it.
 4. Gregor's Tutorial on how to use Rivanna, <https://github.com/cybertraining-dsc/reu2022/blob/main/project/hpc/rivanna-introduction.md>
 5. Gregor's on how to set up a Windows Machine for Research, <https://github.com/cybertraining-dsc/reu2022/blob/main/project/windows-configuration.md>
 6. Dataset reference, <https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/>
+7. SBATCH reference, <https://www.rc.virginia.edu/userinfo/rivanna/slurm/>
