@@ -1,6 +1,11 @@
 # Singularity documentation
 
+The following documentation is used for running scripts on the datasets acquired from cosmoflow.
+The steps below will detail how to use singularity pull to download a local image in a sif file to run the scripts.
+
 ## Checkout the Code 
+
+The first step is to acquire the code and set up a project directory. This is done using the following steps.
 
 ```bash
 export PROJECT=/scratch/$USER/cosmoflow
@@ -19,6 +24,8 @@ make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-small-data
 ```
 
 ## Checkout the Data
+
+Use these lines in order to prepare the large dataset
 
 ```bash
 rivanna> cd ../$DATA
@@ -55,4 +62,3 @@ Afterwards, using the following sbatch settings to run a script you can execute 
 ## Slurm Script
 
 An example script will be available in scripts > rivanna > train-cori-rivanna.slurm
-
