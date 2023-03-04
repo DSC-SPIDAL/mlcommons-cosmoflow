@@ -3,223 +3,13 @@
 Authors:
 Gregor von Laszewski, Varun Pavuloori
 
-# TODO Tasks
+### Introduction
 
-Tasks:
+This readme file will hopefully guide you, in order to setup your environment in Rivanna, download the Cosmoflow data, and help run slurm scripts. 
 
-* Main Task: clean up the readme file
-  * include a section to uninstall python env
-    * (the conda deactivate COSMOFLOW)
-  * in the future take the TODO tasks out of the readme so that its super clean for anyone to run it
+# Setup the Project Directory
 
-Time the wget for the large dataset in the data dir in $PROJECT
-
-Include section for importing datasets from hpc into mlcommons so that others can access python scripts read my slurm
-
-## Table of contents
-
-TODO: complete with a good organizational structure
-
-1. [Setup -WIP-](#gregors-notes-for-setup)
-2. [Installing Rivanna](#install-on-rivanna)
-
-   1. [Setting up the Project Directory and Getting the code](#set-up-a-project-directory-to-get-the-code)
-   2. [Data Preparation](#data-preparation)
-   3. [Set up Python via Miniforge and Conda](#set-up-python-via-miniforge-and-conda)
-   4. [Job Info](#interacting-with-rivanna)
-
-3. [Running Scripts](#running-scripts)
-4. [References](#references)
-
-
-## FUTURE WARNING
-
----
-
-***UNDER NO CIRCUMSTANCES 
-say `conda init` even
-if conda tells you to do that. 
-It will mess up your environment !!!!!!!!!!!!!!!!!!!!!***. 
-
----
-
-## Gregors notes for setup
-
----
-
-### Ubuntu
-
-First install Python 3.8
-
-```
-sudo snap install cmake --classic
-sudo apt update && sudo apt upgrade
-sudo apt install software-properties-common
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt install python3.8
-sudo apt install python3.8-venv
-python3.8 -V
-# Python 3.8.16
-source ~/TF/bin/activate
-```
-
-Next install MPI from source
-
-```
-wget https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.0.tar.gz
-tar -xzvf openmpi-4.0.0.tar.gz
-cd openmpi-4.0.0
-./configure --prefix=/usr/local --with-cuda
-sudo make all install
-sudo ldconfig
-cd ..
-```
-
-Now install  tensorflow, horovod and cosmoflow
-
-```bash
-mkdir cosmo
-cd cosmo/
-export PROJECT=`pwd`
-cd $PROJECT
-git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git
-git clone https://github.com/mlcommons/hpc.git
-make -f mlcommons-cosmoflow/scripts/ubuntu/Makefile get-small-data
-pip install -r $PROJECT/mlcommons-cosmoflow/scripts/ubuntu/requirements.txt 
-# HOROVOD_WITH_TENSORFLOW=1 pip install --no-cache-dir horovod
-pip install --no-cache-dir horovod
-```
-
-Now you have a working environment (hopefully, e.g. not yet tested)
-
-to run the program say
-
-```bash
-make -f mlcommons-cosmoflow/scripts/ubuntu/Makefile run-small-data
-```
-
-This will give now an error in loading data. it seems the configuration is wrong?
-
-```
-2023-02-16 10:07:47,398 INFO Loading data
-Traceback (most recent call last):
-  File "/home/green/cosmo/hpc/cosmoflow/train.py", line 395, in <module>
-    main()
-  File "/home/green/cosmo/hpc/cosmoflow/train.py", line 282, in main
-    datasets = get_datasets(dist=dist, **data_config)
-  File "/home/green/cosmo/hpc/cosmoflow/data/__init__.py", line 39, in get_datasets
-    return get_datasets(**data_args)
-  File "/home/green/cosmo/hpc/cosmoflow/data/cosmo.py", line 207, in get_datasets
-    train_dataset, n_train_steps = construct_dataset(
-  File "/home/green/cosmo/hpc/cosmoflow/data/cosmo.py", line 108, in construct_dataset
-    assert (0 <= n_files) and (n_files <= len(filenames)), (
-AssertionError: Requested 524288 files, 32 available
-make: *** [mlcommons-cosmoflow/scripts/ubuntu/Makefile:39: run-small-data] Error 1
-```
- 
-
-
-
----
-
-
-### macOS M1
-
-set up prg
-
-```bash
-export PROJECT=`pwd`
-```
-
-use the above if included in your own dir instead of project
-
-```bash
-export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
-mkdir -p $PROJECT
-cd $PROJECT
-git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git
-git clone https://github.com/mlcommons/hpc.git
-cd mlcommons-cosmoflow/
-# git pull
-cd $PROJECT
-make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-small-data
-```
-
-
-```bash
-pip install -r $PROJECT/mlcommons-cosmoflow/scripts/rivanna/requirements.txt 
-```
-
-macos not yet tested
-
-
-```
-brew install cmake
-brew install open-mpi
-brew install python@3.8
-brew install libuv # for horovod
-/opt/homebrew/Cellar/python@3.8/3.8.16/bin/python3.8  -m venv ~/TF
-source ~/TF/bin/activate
-pip install --upgrade pip
-pip install tensorflow-macos
-HOROVOD_WITHOUT_MPI=1 HOROVOD_WITH_TENSORFLOW=1 pip install --no-cache-dir horovod
-```
-
-check
-
-```
-python 
-Python 3.8.16 (default, Dec  7 2022, 01:27:54) 
-[Clang 14.0.0 (clang-1400.0.29.202)] on darwin
-Type "help", "copyright", "credits" or "license" for more information.
->>> import tensorflow
->>> tensorflow.__version__
-'2.11.0'
-```
-
-```bash
-time pip install -r $PROJECT/mlcommons-cosmoflow/scripts/macos/requirements.txt
-```
-
-```
-make -f mlcommons-cosmoflow/scripts/macos/Makefile run-small-data
-ERROR
-
-tensorflow.python.framework.errors_impl.NotFoundError: dlopen(/Users/USER/TF/lib/python3.8/site-packages/horovod/tensorflow/mpi_lib.cpython-38-darwin.so, 0x0006): weak-def symbol not found '__ZN3xla14HloInstruction5VisitIPKS0_EEN3tsl6StatusEPNS_17DfsHloVisitorBaseIT_EE'
-make: *** [run-small-data] Error 1
-```
-
-### Rivanna
-
-
-Set up the teminal as follows so you can have proper width and also ssh in case we need to use git 
-```bash
-resize # set terminal width and hight
-reset  # make sure you start with fresh window may have to add to .bashrc
-eval `ssh-agent`
-ssh-add
-```
-
-## Install on Rivanna
-
-We will run Cosmoflow benchmark on Rivanna, in the group `bii_dsc_community` and the directory:
-
-```/project/bii_dsc_community```
-
-Furthermore, we will use the slurm partitions:
-
-TODO: fill in the ?? after ticket resolves
-
- * `gpu` and `bii-gpu` or 
- * `??` and `??`
- 
- for running future scripts.
-
-See Gregors e-mail.
-
-### Set up a Project Directory to get the Code
-
-To get the code follow these steps:
+To start, we begin by cloning the contents of hpc cosmoflow into our system using the following steps:
 
 ```bash
 export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
@@ -231,10 +21,9 @@ git clone https://github.com/mlcommons/hpc.git
 ln -s $PROJECT/hpc/cosmoflow $PROJECT/mlcommons-cosmoflow/.
 ```
 
-We need to copy the content of hpc cosmoflow into our cosmoflow
+These lines essentially create a Project directory and create a hyperlink to them in order to make it easier to cd to it.
 
-
-## Data Preparation
+# Get the Data
 
 The data for this program is located at 
 
@@ -244,11 +33,14 @@ We provide a convenient way to download the data via the Makefile.
 We download two data sets, a small and a large one. To download both simply 
 say 
 
+TODO: verify this 
+
 ```bash
-rivanna> make get-data
+rivanna> time make get-data
 ```
 
-However, this may 
+However, 
+TODO: verify this 
 
 ```bash
 rivanna> cd $PROJECT
@@ -291,44 +83,13 @@ Once the make file targets are uncompressed you will find the data in the direct
 * small data is in: `cosmoUniverse_2019_05_4parE_tf_small`
 * large data is in: `cosmoUniverse_2019_05_4parE_tf`
 
+# Info on Running Scripts
 
+Before you can run scripts it is important to know two possible ways to run a script. There are both Interactive Jobs and Batch Jobs. 
 
-## Set up Python via Miniforge and Conda
-
-gregors version of this
-
-```bash
-rivanna> module load anaconda
-rivanna> conda -V    # 4.9.2
-rivanna> anaconda -V # 1.7.2
-```
-
-```bash
-rivanna> time conda create -n -y COSMOFLOW python=3.8
-rivanna> conda activate COSMOFLOW
-```
-
-The creation of the COSMOFLOW environment will take about 30 seconds.
-
-```bash
-rivanna> module load anaconda
-rivanna> conda -V    # 4.9.2
-rivanna> anaconda -V # 1.7.2
-rivanna> conda activate COSMOFLOW
-rivanna> time pip install -r $PROJECT/mlcommons-cosmoflow/scripts/rivanna/requirements.txt
-```
-
-The pip command will take 2 seconds. 
-
-As a reminder, DO NOT USE CONDA INIT!!!!!
-
-## Interacting with Rivanna
-
-Rivanna has two brimary modes so users can interact with it. 
-
-* **Interactive Jobs:** The first one are interactive jobs that allow you to 
+* **Interactive Jobs:** The first are interactive jobs that allow you to 
   reserve a node on rivanna so it looks like a login node. This interactive mode is
-  usefull only during the debug phase and can serve as a convenient way to quickly create 
+  useful mostly during the debug phase and can serve as a convenient way to quickly create 
   batch scripts that are run in the second mode. This is useful for when you need a large amount
   of resources to be allocated to your job. It can be accessed using the following line:
 
@@ -336,44 +97,49 @@ Rivanna has two brimary modes so users can interact with it.
   rivanna> ijob -c 1 -p largemem --time=1-00:00:00
   ```
 
-  In the above command, the parameter next to "-c" indicates the number of cores, "-p" is the partition, 
-  and time is the length of allocation.
+  In the above command, the parameter next to `-c` indicates the number of cores, `-p` is the partition, 
+  and `--time` is the length of allocation.
 
 *  **Batch Jobs:** The second mode is a batch job that is controlled by a batch script. 
    We will showcase here how to set such scripts up and use them, and you can view examples of them 
-   by locating scripts > rivanna > train-cori-rivanna.slurm or by using this hyperlink
-   [train-cori-rivanna.slurm](/main/mlcommons-cosmoflow/scripts/rivanna/train-cori-rivanna.slurm)
+   by locating `scripts` > `rivanna` > `train-cori-rivanna.slurm` or by using this hyperlink
+   TODO: see if this link will work from github doc not from vscode
+   [train-cori-rivanna.slurm](./main/mlcommons-cosmoflow/scripts/rivanna/train-cori-rivanna.slurm)
 
    The sbatch parameters and what they control can be found at this website:
-   <https://www.rc.virginia.edu/userinfo/rivanna/slurm/>
+
+   * <https://www.rc.virginia.edu/userinfo/rivanna/slurm/>
 
 
-## Running scripts
+# Prepare the Image for Running Scripts
 
-Before running scripts, make sure you have already gotten the singularity image via a sif file
-Details of which can be found in README-singularity.md in this repo.
-[README-singularity.md](README-singularity.md)
+In order to run scripts on rivanna we need to get a prebuilt image for cosmoflow via a `.sif` file. 
 
-After finishing the instructions use these steps to set up a results directory and run your script
+Fortunately one is provided to you and can be downloaded via a singularity pull command, the details for which are below. Before beginning to pull the `.sif` file. Make sure that you have already completed the [Get the Data](#get-the-data) section of this README.
+
+To begin execute the following commands in the $PROJECT directory in Rivanna. (Details for setting up $PROJECT can be found in [Setup the Project Dir](#setup-the-project-directory))
 
 ```bash
-rivanna> mkdir -p $PROJECT/results
-rivanna> cd $PROJECT/results
-rivanna> sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-small.slurm
-rivanna> squeue -u $USER
+rivanna> mkdir /scratch/$USER/.singularity
+rivanna> ln -s /scratch/$USER/.singularity ~/.singularity
+rivanna> cd $SIF_DIR
+rivanna> module load singularity
 ```
 
-The squeue command will give you the jobid and the status of the submitted script.
+Since the `singularity pull` command will use a lot of resources, make sure to start an interactive job. Some users may be able to succesfully download the `.sif` image without an interactive job, however users of Rivanna will find that the resource restriction requires one.
 
-TODO: include a section about importing the python scripts from hpc into a directory to be accessed by the slurm script.
+Start the interactive job using the following command:
 
-## References
+```bash
+rivanna> ijob -c 1 -p largemem --time=1-00:00:00
+```
 
+Once the job has started execute the following line:
 
-1. Instructions for running cosmoflow on Rivanna, <https://github.com/DSC-SPIDAL/mlcommons-cosmoflow>
-2. MLcommons repository of cosmoflow, <https://github.com/mlcommons/hpc/tree/main/cosmoflow>
-3. Paper on cosmoflow, <TBD>
-4. Gregor's Tutorial on how to use Rivanna, <https://github.com/cybertraining-dsc/reu2022/blob/main/project/hpc/rivanna-introduction.md>
-5. Gregor's on how to set up a Windows Machine for Research, <https://github.com/cybertraining-dsc/reu2022/blob/main/project/windows-configuration.md>
-6. Dataset reference, <https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/>
-7. SBATCH reference, <https://www.rc.virginia.edu/userinfo/rivanna/slurm/>
+```bash
+rivanna> singularity pull docker://sfarrell/cosmoflow-gpu:mlperf-v1.0
+```
+
+The download time will be about 10 minutes.
+
+# Writing a Slurm Script
