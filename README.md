@@ -14,8 +14,7 @@ Tasks:
 
 Time the wget for the large dataset in the data dir in $PROJECT
 
-figure out conda (NEVER USE CONDA INIT!!!!!!!!!!!!!)
-  conda create
+Include section for importing datasets from hpc into mlcommons so that others can access python scripts read my slurm
 
 ## Table of contents
 
@@ -30,6 +29,7 @@ TODO: complete with a good organizational structure
    4. [Job Info](#interacting-with-rivanna)
 
 3. [Running Scripts](#running-scripts)
+4. [References](#references)
 
 
 ## FUTURE WARNING
@@ -341,7 +341,8 @@ Rivanna has two brimary modes so users can interact with it.
 
 *  **Batch Jobs:** The second mode is a batch job that is controlled by a batch script. 
    We will showcase here how to set such scripts up and use them, and you can view examples of them 
-   by locating scripts > rivanna > train-cori-rivanna.slurm
+   by locating scripts > rivanna > train-cori-rivanna.slurm or by using this hyperlink
+   [train-cori-rivanna.slurm](https://github.com/DSC-SPIDAL/mlcommons-cosmoflow/blob/main/scripts/rivanna/train-cori-rivanna.slurm)
 
    The sbatch parameters and what they control can be found at this website:
    <https://www.rc.virginia.edu/userinfo/rivanna/slurm/>
@@ -351,6 +352,7 @@ Rivanna has two brimary modes so users can interact with it.
 
 Before running scripts, make sure you have already gotten the singularity image via a sif file
 Details of which can be found in README-singularity.md in this repo.
+[README-singularity.md](https://github.com/DSC-SPIDAL/mlcommons-cosmoflow/blob/main/README-singularity.md)
 
 After finishing the instructions use these steps to set up a results directory and run your script
 
@@ -363,7 +365,7 @@ rivanna> squeue -u $USER
 
 The squeue command will give you the jobid and the status of the submitted script.
 
-TODO: include a section about importing the scripts from hpc into a directory to be accessed by the script.
+TODO: include a section about importing the python scripts from hpc into a directory to be accessed by the slurm script.
 
 ## References
 
