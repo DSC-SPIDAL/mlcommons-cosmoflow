@@ -255,14 +255,14 @@ rivanna> cd $PROJECT
 rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-data
 ```
 
-The download of all data takes ?? seconds./
+The download of all data takes ?? seconds.
 The uncompression of that data takes ?? seconds.
 
 In case you only like to get the small data set use
 
 ```bash
 rivanna> cd $PROJECT
-rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-small-data
+rivanna> time make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-small-data
 ```
 
 The download command takes about 4 seconds to execute on Rivanna.
@@ -279,7 +279,7 @@ In case you only like to get the large dataset use
 
 ```bash
 rivanna> cd $PROJECT
-rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-large-data
+rivanna> time make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-large-data
 ```
 
 The download of the large data takes about ? seconds to execute on Rivanna.
@@ -288,8 +288,8 @@ The uncompress of the large data takes about ? seconds to execute on Rivanna.
 Once the make file targets are uncompressed you will find the data in the directory 
 `$PROJECT/data`. With the following subdirectories
 
-* small data is in: `TODO`
-* large data is in: `TODO`
+* small data is in: `cosmoUniverse_2019_05_4parE_tf_small`
+* large data is in: `cosmoUniverse_2019_05_4parE_tf`
 
 
 
@@ -342,7 +342,7 @@ Rivanna has two brimary modes so users can interact with it.
 *  **Batch Jobs:** The second mode is a batch job that is controlled by a batch script. 
    We will showcase here how to set such scripts up and use them, and you can view examples of them 
    by locating scripts > rivanna > train-cori-rivanna.slurm or by using this hyperlink
-   [train-cori-rivanna.slurm](https://github.com/DSC-SPIDAL/mlcommons-cosmoflow/blob/main/scripts/rivanna/train-cori-rivanna.slurm)
+   [train-cori-rivanna.slurm](/main/mlcommons-cosmoflow/scripts/rivanna/train-cori-rivanna.slurm)
 
    The sbatch parameters and what they control can be found at this website:
    <https://www.rc.virginia.edu/userinfo/rivanna/slurm/>
@@ -352,7 +352,7 @@ Rivanna has two brimary modes so users can interact with it.
 
 Before running scripts, make sure you have already gotten the singularity image via a sif file
 Details of which can be found in README-singularity.md in this repo.
-[README-singularity.md](https://github.com/DSC-SPIDAL/mlcommons-cosmoflow/blob/main/README-singularity.md)
+[README-singularity.md](README-singularity.md)
 
 After finishing the instructions use these steps to set up a results directory and run your script
 
