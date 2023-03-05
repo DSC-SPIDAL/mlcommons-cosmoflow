@@ -42,3 +42,17 @@ The pip command will take 2 seconds.
 
 As a reminder, DO NOT USE CONDA INIT!!!!!
 
+
+
+
+Proj Dir setup old: 
+
+```bash
+export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
+mkdir -p $PROJECT
+cd $PROJECT
+git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git  
+git clone https://github.com/mlcommons/hpc.git
+# cp -r $PROJECT/hpc/cosmoflow $PROJECT/mlcommons-cosmoflow/.
+ln -s $PROJECT/hpc/cosmoflow $PROJECT/mlcommons-cosmoflow/.
+```
