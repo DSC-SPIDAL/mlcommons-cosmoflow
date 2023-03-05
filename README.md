@@ -19,8 +19,9 @@ git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git
 git clone https://github.com/mlcommons/hpc.git
 ln -s $PROJECT/hpc/cosmoflow $PROJECT/mlcommons-cosmoflow/.
 ```
-` 
-These lines essentially create a Project directory and create a hyperlink to them in order to make it easier to cd to it.
+ 
+These lines essentially create a Project directory with a soft link to the `hpc` cosmoflow inside `mlcommons-cosmoflow`. When accessing cosmoflow resources in the future make sure to remember to cd to the `$PROJECT` directory.
+The above lines will take about 8 mins in total.
 
 # Get the Data
 
@@ -38,10 +39,15 @@ rivanna> time make get-data
 
 However, we recommend running this modified command in your project directory.
 
+NOTE: get large data takes a while
+
 ```bash
 rivanna> cd $PROJECT
 rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-data
 ```
+
+The download and uncompression of the small dataset will take about 1 minute.
+The download and uncompression of the large dataset will take about ?? minutes.
 
 The download of both datasets takes ?? seconds.
 The uncompression of that data takes ?? seconds.
@@ -80,10 +86,18 @@ The uncompress of the large data takes about ? seconds to execute on Rivanna.
 ---
 
 Once the make file targets are uncompressed you will find the data in the directory 
-`$PROJECT/data`. With the following subdirectories
+`$PROJECT/data`, or more specifically `/scratch/$USER/cosmoflow/data`. With the following subdirectories
 
 * small data is in: `cosmoUniverse_2019_05_4parE_tf_small`
 * large data is in: `cosmoUniverse_2019_05_4parE_tf`
+
+---
+
+As a tip, in order to easily access your data directory we reccomend making a soft link from your scratch directory to your project directory through the following command:
+
+```bash
+rivanna> ln -s /scratch/$USER/cosmoflow/data /$PROJECT/data
+```
 
 # Info on Running Scripts
 
@@ -124,7 +138,8 @@ To begin execute the following commands in the $PROJECT directory in Rivanna. (D
 ```bash
 rivanna> mkdir /scratch/$USER/.singularity
 rivanna> ln -s /scratch/$USER/.singularity ~/.singularity
-rivanna> cd $SIF_DIR
+rivanna> export USER_CONTAINER_DIR=/scratch/$USER/.singularity
+rivanna> cd $USER_CONTAINER_DIR
 rivanna> module load singularity
 ```
 
@@ -209,6 +224,12 @@ Make sure to update the variables in the example script including where your `.s
 # Submitting a Slurm Script
 
 When submitting a slurm script, it is possible to designate several configurations, usually done so through a `.yaml` file found in `configs`>`rivanna`>`cosmo.yaml` in the mlcommons repository. The `train.py` script will by default designate `cosmo.yaml` as its config.
+
+In order for a slurm script to read your python scripts, please execute the following command to create a soft link to the mlcommons repository inside your scratch folder.
+
+```bash
+rivanna> ln -s /$PROJECT/mlcommons-cosmoflow /scratch/$USER/cosmoflow
+```
 
 Moving on, in order to submit a slurm script, navigate to the `$PROJECT` directory and then execute the following instructions to create a results subdirectory under `$PROJECT`.
 
