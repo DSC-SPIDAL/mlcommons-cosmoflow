@@ -266,21 +266,22 @@ ln -s $PROJECT/hpc/cosmoflow $PROJECT/mlcommons-cosmoflow/.
 rivanna> cd $PROJECT
 rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-data
 
+rivanna> ln -s /scratch/$USER/cosmoflow/data /$PROJECT/data
+
 rivanna> mkdir /scratch/$USER/.singularity
 rivanna> ln -s /scratch/$USER/.singularity ~/.singularity
-rivanna> cd $SIF_DIR
+rivanna> export USER_CONTAINER_DIR=/scratch/$USER/.singularity
+rivanna> cd $USER_CONTAINER_DIR
 rivanna> module load singularity
 
 rivanna> ijob -c 1 -p largemem --time=1-00:00:00
-
 rivanna> singularity pull docker://sfarrell/cosmoflow-gpu:mlperf-v1.0
-
 rivanna> exit
 
-rivanna> cd ../$PROJECT
+rivanna> ln -s /$PROJECT/mlcommons-cosmoflow /scratch/$USER/cosmoflow
+
 rivanna> mkdir -p $PROJECT/results
 rivanna> cd $PROJECT/results
-
 rivanna> sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-cori-rivanna.slurm
 rivanna> squeue -u $USER
 ```
