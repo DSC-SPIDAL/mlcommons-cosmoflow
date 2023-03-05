@@ -14,12 +14,13 @@
 module purge
 module load singularity
 
+## singularity pull docker://sfarrell/cosmoflow-gpu:mlperf-v1.0
 ## TODO: checkout whether SIF_DIR should use cosmoflow or DSC_COSMOFLOW and update DSC cosmoflow
 ## to contain only a folder DSC with cosmoflow in it
 
-export RUN_DIR=/scratch/$USER
-export SCRIPT_DIR=$RUN_DIR/cosmoflow/mlcommons-cosmoflow/scripts/rivanna
-export USER_CONTAINER_DIR=$RUN_DIR/.singularity
-cd $RUN_DIR
+export SIF_DIR=/scratch/$USER/cosmoflow
+export USER_CONTAINER_DIR=/scratch/$USER/.singularity
+export COSMOFLOW=$SIF_DIR/hpc/cosmoflow
+cd $SIF_DIR
 
-singularity run --nv $USER_CONTAINER_DIR/cosmoflow-gpu_mlperf-v1.0.sif $SCRIPT_DIR/train.py
+singularity run --nv $USER_CONTAINER_DIR/cosmoflow-gpu_mlperf-v1.0.sif $SIF_DIR/train.py
