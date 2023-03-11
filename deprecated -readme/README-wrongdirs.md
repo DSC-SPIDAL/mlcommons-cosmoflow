@@ -12,16 +12,16 @@ This readme file will hopefully guide you, in order to setup your environment in
 To start, we begin by cloning the contents of hpc cosmoflow into our system using the following steps:
 
 ```bash
-rivanna> export PROJECT=/scratch/$USER/cosmoflow
-rivanna> mkdir -p $PROJECT
-rivanna> cd $PROJECT
-rivanna> git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git  
-rivanna> git clone https://github.com/mlcommons/hpc.git
-rivanna> ln -s $PROJECT/hpc/cosmoflow $PROJECT/mlcommons-cosmoflow/.
+export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
+mkdir -p $PROJECT
+cd $PROJECT
+git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git  
+git clone https://github.com/mlcommons/hpc.git
+ln -s $PROJECT/hpc/cosmoflow $PROJECT/mlcommons-cosmoflow/.
 ```
  
 These lines essentially create a Project directory with a soft link to the `hpc` cosmoflow inside `mlcommons-cosmoflow`. When accessing cosmoflow resources in the future make sure to remember to cd to the `$PROJECT` directory.
-The above lines will take about 5 mins in total.
+The above lines will take about 8 mins in total.
 
 # Get the Data
 
@@ -31,7 +31,7 @@ The data for the program is located at
 
 We have provided a convenient way to download the data via a Makefile. 
 
-We will download two data sets, a small and a large one. To download both using the aforementioned Makefile we will run a variation of the following command.
+We will download two data sets, a small and a large one. To download both using the aforementioned Makefile you could run the following command.
 
 ```bash
 rivanna> time make get-data
@@ -39,7 +39,7 @@ rivanna> time make get-data
 
 However, we recommend running this modified command in your project directory.
 
-NOTE: get large data takes a while, we have documented how to only download the small dataset below
+NOTE: get large data takes a while
 
 ```bash
 rivanna> cd $PROJECT
@@ -90,6 +90,14 @@ Once the make file targets are uncompressed you will find the data in the direct
 
 * small data is in: `cosmoUniverse_2019_05_4parE_tf_small`
 * large data is in: `cosmoUniverse_2019_05_4parE_tf`
+
+---
+
+As a tip, in order to easily access your data directory we reccomend making a soft link from your scratch directory to your project directory through the following command:
+
+```bash
+rivanna> ln -s /scratch/$USER/cosmoflow/data /$PROJECT/data
+```
 
 # Info on Running Scripts
 
@@ -242,28 +250,32 @@ Otherwise, the job should print a results file which you can also open.
 If you are testing for replicability the main steps are to run these lines of code in succession:
 
 ```bash
-rivanna> export PROJECT=/scratch/$USER/cosmoflow
-rivanna> mkdir -p $PROJECT
-rivanna> cd $PROJECT
-rivanna> git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git  
-rivanna> git clone https://github.com/mlcommons/hpc.git
-rivanna> ln -s $PROJECT/hpc/cosmoflow $PROJECT/mlcommons-cosmoflow/.
+export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
+mkdir -p $PROJECT
+cd $PROJECT
+git clone git@github.com:DSC-SPIDAL/mlcommons-cosmoflow.git  
+git clone https://github.com/mlcommons/hpc.git
+ln -s $PROJECT/hpc/cosmoflow $PROJECT/mlcommons-cosmoflow/.
 
 rivanna> cd $PROJECT
 rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-data
+
+rivanna> ln -s /scratch/$USER/cosmoflow/data /$PROJECT/data
 
 rivanna> mkdir /scratch/$USER/.singularity
 rivanna> ln -s /scratch/$USER/.singularity ~/.singularity
 rivanna> export USER_CONTAINER_DIR=/scratch/$USER/.singularity
 rivanna> cd $USER_CONTAINER_DIR
 rivanna> module load singularity
+
 rivanna> ijob -c 1 -p largemem --time=1-00:00:00
 rivanna> singularity pull docker://sfarrell/cosmoflow-gpu:mlperf-v1.0
 rivanna> exit
+
+rivanna> ln -s /$PROJECT/mlcommons-cosmoflow /scratch/$USER/cosmoflow
 
 rivanna> mkdir -p $PROJECT/results
 rivanna> cd $PROJECT/results
 rivanna> sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-cori-rivanna.slurm
 rivanna> squeue -u $USER
-
 ```

@@ -9,7 +9,7 @@ DATA=/scratch/$(USER)/cosmoflow/data
 
 info:
 	echo "user:" $(USER)
-	echor "project:" $(PROJECT)
+	echo "project:" $(PROJECT)
 
 create-data-dir:
 	mkdir -p $(DATA)
