@@ -2,10 +2,11 @@
 # Targets to fetch the data
 #
 
-# PROJECT=/project/bii_dsc_community/$(USER)/cosmoflow
+PROJECT=/project/bii_dsc_community/$(USER)/cosmoflow
 RESULT=$(PROJECT)/result
-PROJECT=/scratch/$(USER)/cosmoflow
-DATA=/scratch/$(USER)/cosmoflow/data
+#PROJECT=/scratch/$(USER)/cosmoflow
+#DATA=/scratch/$(USER)/cosmoflow/data
+DATA=/home/$(USER)/comsoflow1/data
 
 info:
 	echo "user:" $(USER)
