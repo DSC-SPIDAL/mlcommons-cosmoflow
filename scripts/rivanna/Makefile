@@ -27,9 +27,9 @@ get-small-data: create-data-dir
 	time tar zxvf cosmoUniverse_2019_05_4parE_tf_small.tgz
 
 get-large-data: create-data-dir
-	cd $($DATA); \
+	cd $(DATA); \
 	time wget https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/cosmoUniverse_2019_05_4parE_tf_v2.tar
-	cd $($DATA); \
+	cd $(DATA); \
 	time tar -xvf cosmoUniverse_2019_05_4parE_tf_v2.tar
 
 squeue:
