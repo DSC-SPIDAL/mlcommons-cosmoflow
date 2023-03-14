@@ -18,7 +18,7 @@ module load singularity
 ## to contain only a folder DSC with cosmoflow in it
 
 export RUN_DIR=/scratch/$USER
-export SCRIPT_DIR=$RUN_DIR/cosmoflow/mlcommons-cosmoflow/scripts/rivanna
+export SCRIPT_DIR=$RUN_DIR/cosmoflow/hpc
 export USER_CONTAINER_DIR=$RUN_DIR/.singularity
 cd $RUN_DIR
 
