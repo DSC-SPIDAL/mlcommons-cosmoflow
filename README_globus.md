@@ -95,7 +95,16 @@ globus transfer $SRC_ENDPOINT:$SRC_FILE $DEST_ENDPOINT:$DEST_DIR
 * NOTE: I anticipate for your first transfer that you will run into an issue where you need to give globus permission to initiate transfers via the CLI instead of via the web tool. I was given the unique command as follows by my terminal:
 
 ```bash
-globus session consent 'urn:globus:auth:scope:transfer.api.globus.org:all[*https://auth.globus.org/scopes/e6b338df-213b-4d31-b02c-1bc2c628ca07/data_access]'
+-bash-4.2$globus transfer $SRC_ENDPOINT:$SRC_FILE $DEST_ENDPOINT:$DEST_DIR
+The collection you are trying to access data on requires you to grant consent for the Globus CLI to access it.
+message: Missing required data_access consent
+
+Please run
+
+  globus session consent 'urn:globus:auth:scope:transfer.api.globus.org:all[*https://auth.globus.org/scopes/e6b338df-213b-4d31-b02c-1bc2c628ca07/data_access]'
+
+to login with the required scopes
+
 ```
 
 After initiating this command, a similar sign in a verification will be conducted compared to the `globus login` method where the cli will output a url to follow, the user will sign in, and return a verification code.
