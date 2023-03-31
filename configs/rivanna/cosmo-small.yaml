@@ -1,4 +1,4 @@
-output_dir: results/cosmo-002
+output_dir: results/cosmo_small
 
 mlperf:
     org: LBNL
