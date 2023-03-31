@@ -23,7 +23,7 @@ After executing `globus login` your console should look like the following block
 
 * NOTE: this is a unique link generated for when I attempted to login, each user will have a different link.
 
-```bash
+```
 -bash-4.2$globus login
 Please authenticate with Globus here:
 ------------------------------------
@@ -50,11 +50,11 @@ Each globus endpoint has a unique endpoint ID. In this case our source endpoint 
 * `d0b1b73a-efd3-11e9-993f-0a8c187e8c12`
 
 Set up a variable `ENDPOINT` so you can use the endpoint more easily without retyping it. 
-Also  set a variable `SRC_FILE` to indicate the filename of the file to be transferred.
+Also set a variable `SRC_FILE` to indicate the directory with the files to be transferred.
 
 ```bash
 export SRC_ENDPOINT=d0b1b73a-efd3-11e9-993f-0a8c187e8c12
-export SRC_FILE=cosmoUnivers_2019_05-4parE_tf_small.tgz
+export SRC_PATH=/~/
 ```
 
 You can look at the files in the globus endpoint using `globus ls` to verify that you are looking at the right endpoint.
@@ -72,7 +72,7 @@ Repeat the above steps with this endpoint and set up the variables including a `
 ```bash
 globus endpoint search 'UVA Standard Security Storage'
 export DEST_ENDPOINT=e6b338df-213b-4d31-b02c-1bc2c628ca07
-export DEST_DIR=dtn/landings/users/u/uj/$USER/project/bii_dsc_community/uja2wd/cosmoflow/
+export DEST_DIR=/dtn/landings/users/u/uj/$USER/project/bii_dsc_community/uja2wd/cosmoflow/
 ```
 
 * NOTE: to find the specific path of where to write to, it is best to sign into the web format of globus and find your desired path variable. 
@@ -89,13 +89,13 @@ export DEST_DIR=dtn/landings/users/u/uj/$USER/project/bii_dsc_community/uja2wd/c
 Finally, execute the transfer
 
 ```bash
-globus transfer $SRC_ENDPOINT:$SRC_FILE $DEST_ENDPOINT:$DEST_DIR
+globus transfer $SRC_ENDPOINT:$SRC_PATH $DEST_ENDPOINT:$DEST_DIR
 ```
 
 * NOTE: I anticipate for your first transfer that you will run into an issue where you need to give globus permission to initiate transfers via the CLI instead of via the web tool. I was given the unique command as follows by my terminal:
 
 ```bash
--bash-4.2$globus transfer $SRC_ENDPOINT:$SRC_FILE $DEST_ENDPOINT:$DEST_DIR
+-bash-4.2$globus transfer $SRC_ENDPOINT:$SRC_PATH $DEST_ENDPOINT:$DEST_DIR
 The collection you are trying to access data on requires you to grant consent for the Globus CLI to access it.
 message: Missing required data_access consent
 
@@ -104,7 +104,6 @@ Please run
   globus session consent 'urn:globus:auth:scope:transfer.api.globus.org:all[*https://auth.globus.org/scopes/e6b338df-213b-4d31-b02c-1bc2c628ca07/data_access]'
 
 to login with the required scopes
-
 ```
 
 After initiating this command, a similar sign in a verification will be conducted compared to the `globus login` method where the cli will output a url to follow, the user will sign in, and return a verification code.
@@ -120,7 +119,6 @@ globus task list
 ```
 
 or similarly you can use the web tool to verify transfers.
-
 
 ## References:
 

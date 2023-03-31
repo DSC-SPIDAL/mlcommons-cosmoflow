@@ -7,6 +7,13 @@ Gregor von Laszewski, Varun Pavuloori
 
 This readme file will hopefully guide you, in order to setup your environment in Rivanna, download the Cosmoflow data, and help run slurm scripts. 
 
+# Current TODO
+
+Task List:
+TODO: Email steve, how to run small for debugging because I cant find documentation
+Comp: Globus Transfer
+Comp: Adding mini tarball to endpoint
+
 # Setup the Project Directory
 
 To start, we begin by cloning the contents of hpc cosmoflow into our system using the following steps:
