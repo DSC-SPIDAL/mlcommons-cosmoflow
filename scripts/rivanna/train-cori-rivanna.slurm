@@ -20,4 +20,4 @@ export USER_CONTAINER_DIR=$RUN_DIR/.singularity
 cd $RUN_DIR
 
 singularity run --nv $USER_CONTAINER_DIR/cosmoflow-gpu_mlperf-v1.0.sif $SCRIPT_DIR/cosmoflow/train.py \
-    --config=$PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo_train.yaml
+    --config=$PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml
