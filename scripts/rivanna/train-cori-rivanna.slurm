@@ -19,7 +19,9 @@ export SCRIPT_DIR=$RUN_DIR/cosmoflow/hpc
 export USER_CONTAINER_DIR=$RUN_DIR/.singularity
 cd $RUN_DIR
 
+
 #singularity run --nv $USER_CONTAINER_DIR/cosmoflow-gpu_mlperf-v1.0.sif $SCRIPT_DIR/cosmoflow/train.py \
 #    --config=$PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml
 
 singularity run --nv $USER_CONTAINER_DIR/cosmoflow-gpu_mlperf-v1.0.sif "python $SCRIPT_DIR/cosmoflow/train.py" --config=$PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml
+

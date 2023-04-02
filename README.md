@@ -150,6 +150,49 @@ Start the interactive job using the following command:
 rivanna> ijob -c 1 -p largemem --time=1-00:00:00
 ```
 
+TODO: Add params for a gpu
+Start the interactive job using the following command:
+
+```bash
+rivanna> ijob -c 1 --gres=gpu:a100:1 --account=bii_dsc_community --partition=bii-gpu --reservation=bi_fox_dgx --constraint=a100_80gb --time=1-00:00:00
+```
+
+---
+TODO: figure out these params if needed for ijob
+--mem=32GB
+-c 4
+--time=01:00:00 //1 hour
+
+
+TODO:
+Check out slurm script and make sure the current image is in the right place
+Make /scratch directory visible for singularity
+  give the image the filepath so it can access directories
+
+
+
+Create image for tensorflow
+
+We can only use `output_image.sif` as the name for the singularity image when creating. 
+Afterwards you can change the name of your .sif file to whatever you desire using mv
+
+Same thing with build.def ^^
+
+TODO: update infomall documenation on singularity image
+
+
+
+
+python
+python> import tensorflow
+python> print(tensorflow.__version__)
+python> exit
+
+or
+
+python -c "import tensorflow; print(tensorflow.__version__)"
+---
+
 This will prompt several lines that may look familiar to this: (note that the ##### is in reference to a unique jobid)
 
 ```
@@ -163,7 +206,8 @@ It should only take a minute or two for the job to start, but once the job has s
 
 ```bash
 rivanna> singularity pull docker://sfarrell/cosmoflow-gpu:mlperf-v1.0
-```
+rivanna> mv cosmoflow-gpu_mlperf-v1.0.sif /scratch/$USER/.singularity
+``` 
 
 The download time will be about 15 minutes.
 
