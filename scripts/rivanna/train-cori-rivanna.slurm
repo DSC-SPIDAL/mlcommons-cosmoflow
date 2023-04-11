@@ -15,13 +15,15 @@ module purge
 module load singularity
 
 export RUN_DIR=/scratch/$USER
-export SCRIPT_DIR=$RUN_DIR/cosmoflow/hpc
+export SCRIPT_DIR=$RUN_DIR/cosmoflow/hpc 
 export USER_CONTAINER_DIR=$RUN_DIR/.singularity
+export PROJECT=$RUN_DIR/cosmoflow
 cd $RUN_DIR
 
 
 #singularity run --nv $USER_CONTAINER_DIR/cosmoflow-gpu_mlperf-v1.0.sif $SCRIPT_DIR/cosmoflow/train.py \
 #    --config=$PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml
 
-singularity run --nv $RUN_DIR/tf2.sif "python $SCRIPT_DIR/cosmoflow/train.py" --config=$PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml
+#Ask if this          \/ needs to be user container dir or if it can be run_dir
+singularity run --nv $RUN_DIR/cosmoflow.sif "python $SCRIPT_DIR/cosmoflow/train.py" --config=$PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml
 
