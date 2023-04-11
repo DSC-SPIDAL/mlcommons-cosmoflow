@@ -15,9 +15,7 @@ From: nvcr.io/nvidia/tensorflow:22.04-tf2-py3
     export SCRIPT_DIR=$RUN_DIR/cosmoflow/hpc
     export USER_CONTAINER_DIR=$RUN_DIR/.singularity
 
-%runscript
-    echo "This is what happens when you run the container..."
-    
+
 
     
 
