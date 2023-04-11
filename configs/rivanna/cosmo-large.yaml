@@ -1,4 +1,4 @@
-output_dir: results/cosmo_large
+output_dir: /project/bii_dsc_community/uja2wd/cosmoflow/results/cosmo_large
 
 mlperf:
     org: LBNL

@@ -1,0 +1,23 @@
+Bootstrap: docker
+From: nvcr.io/nvidia/tensorflow:22.04-tf2-py3
+
+%post
+    echo "Hello from inside the container"
+
+    python -m pip install --no-cache-dir -U pip
+    pip install --no-cache-dir pandas wandb
+    pip install --no-cache-dir "git+https://github.com/mlcommons/logging.git"
+
+    python --version
+
+%environment
+    export RUN_DIR=/scratch/$USER
+    export SCRIPT_DIR=$RUN_DIR/cosmoflow/hpc
+    export USER_CONTAINER_DIR=$RUN_DIR/.singularity
+
+%runscript
+    echo "This is what happens when you run the container..."
+    
+
+    
+
