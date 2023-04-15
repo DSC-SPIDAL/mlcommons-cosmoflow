@@ -197,6 +197,29 @@ rivanna> sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-cori-rivanna.
 rivanna> squeue -u $USER
 ```
 
+# Rivanna hardware desc
+
+| Cores/Node | Memory/Node | Specialty Hardware | GPU memory/Device | GPU devices/Node | # of Nodes |
+|------------|-------------|--------------------|-------------------|-----------------|------------|
+| 40         | 354GB       | -                  | -                 | -               | 1          |
+| 20         | 127GB       | -                  | -                 | -               | 115        |
+| 28         | 255GB       | -                  | -                 | -               | 25         |
+| 40         | 384GB       | -                  | -                 | -               | 347        |
+| 40         | 768GB       | -                  | -                 | -               | 35         |
+| 16         | 1000GB      | -                  | -                 | -               | 4          |
+| 48         | 1500GB      | -                  | -                 | -               | 6          |
+| 128        | 1000GB      | GPU: A100          | 40GB              | 8               | 2          |
+| 128        | 2000GB      | GPU: A100          | 80GB              | 8               | 11         |
+| 28         | 255GB       | GPU: K80           | 11GB              | 8               | 8          |
+| 28         | 255GB       | GPU: P100          | 12GB              | 4               | 4          |
+| 40         | 383GB       | GPU: RTX2080Ti     | 11GB              | 10              | 2          |
+| 64         | 128GB       | GPU: RTX3090       | 24GB              | 4               | 5          |
+| 28         | 188GB       | GPU: V100          | 16GB              | 4               | 1          |
+| 40         | 384GB       | GPU: V100          | 32GB              | 4               | 12         |
+| 36         | 384GB       | GPU: V100          | 32GB              | 4               | 2          |
+
+
+
 # Current TODO section
 
 TODO:
@@ -212,3 +235,6 @@ Build def file
 TODO: test using
 pip install horovod[tensorflow,keras,pytorch,mxnet,spark]
     -submit ticket to ask about this if it fails
+
+
+build def for mnist and make sure using gpu and singularity image
