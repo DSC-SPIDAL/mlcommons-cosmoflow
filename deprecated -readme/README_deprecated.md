@@ -46,13 +46,47 @@ rivanna> cd $PROJECT
 rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-data
 ```
 
+The download and uncompression of the small dataset will take about 1 minute.
+The download and uncompression of the large dataset will take about ?? minutes.
+
+The download of both datasets takes ?? seconds.
+The uncompression of that data takes ?? seconds.
+
 ---
 
-Conversely, it may be easier to do this transfer via the globus cli, for which the documentation is included on the uva infomall.
+If you would like to only download the small dataset you can run the following command.
+
+```bash
+rivanna> cd $PROJECT
+rivanna> time make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-small-data
+```
+
+The download command takes about 4 seconds to execute on Rivanna.
+The uncompress command takes about 11 seconds to execute on Rivanna.
+
+This will be creating two directories called:
+
+* `cosmoUniverse_2019_05_4parE_tf_small/train` (32 files)
+* `cosmoUniverse_2019_05_4parE_tf_small/validation` (32 files)
+
+Together this will take up a total of 1.1 GB of space.
+
+---
+
+In case you only like to get the large dataset use
+
+```bash
+rivanna> cd $PROJECT
+rivanna> time make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-large-data
+```
+
+The download of the large data takes about ? seconds to execute on Rivanna.
+The uncompress of the large data takes about ? seconds to execute on Rivanna.
 
 ---
 
 Once the make file targets are uncompressed you will find the data in the directory 
+`$PROJECT/data`, or more specifically `/scratch/$USER/cosmoflow/data`. With the following subdirectories
 
 * small data is in: `cosmoUniverse_2019_05_4parE_tf_small`
 * large data is in: `cosmoUniverse_2019_05_4parE_tf`
@@ -87,25 +121,101 @@ Before you can run scripts it is important to know two possible ways to run a sc
 
 # Prepare the Image for Running Scripts
 
-To make the image we will be using a special node provided by Rivanna `biihead1.bii.virginia.edu` which should be accessed only for creating images. 
+In order to run scripts on rivanna we need to get a prebuilt image for cosmoflow via a `.sif` file. 
 
-* To access it remember to use `ssh $USER@biihead1.bii.virginia.edu`
+Fortunately one is provided to you and can be downloaded via a singularity pull command, the details for which are below. Before beginning to pull the `.sif` file. Make sure that you have already completed the [Get the Data](#get-the-data) section of this README.
 
-Then while standing in your `/scratch/$USER/` directory make sure to create a copy of the supplied file in the mlcommons-cosmoflow repo that cound be found in `/builds/build.def` into a new file that MUST be named `build.def`.
+To begin execute the following commands in the $PROJECT directory in Rivanna. (Details for setting up $PROJECT can be found in [Setup the Project Dir](#setup-the-project-directory))
 
-Then run the following command to create an image titled `output_image.sif`:
-
-```bash rc
-rivanna> sudo /opt/singularity/3.7.1/bin/singularity build output_image.sif build.def
+```bash
+rivanna> mkdir /scratch/$USER/.singularity
+rivanna> ln -s /scratch/$USER/.singularity ~/.singularity
+rivanna> export USER_CONTAINER_DIR=/scratch/$USER/.singularity
+rivanna> cd $USER_CONTAINER_DIR
+rivanna> module load singularity
 ```
 
-Make sure to rename the image to something that makes more sense for readability.
+Since the `singularity pull` command will use a lot of resources, make sure to start an interactive job. Some users may be able to succesfully download the `.sif` image without an interactive job, however users of Rivanna will find that the resource restriction requires one.
 
-```bash rc
-rivanna> mv output_image.sif cosmoflow.sif
+Start the interactive job using the following command:
+
+```bash
+rivanna> ijob -c 1 -p largemem --time=1-00:00:00
 ```
 
-As a side note, make sure to exit the special `biihead` node after you are no longer creating images.
+TODO: Add params for a gpu
+Start the interactive job using the following command:
+
+```bash
+rivanna> ijob -c 1 --gres=gpu:a100:1 --account=bii_dsc_community --partition=bii-gpu --reservation=bi_fox_dgx --constraint=a100_80gb --time=1-00:00:00
+```
+
+---
+TODO: figure out these params if needed for ijob
+--mem=32GB
+-c 4
+--time=01:00:00 //1 hour
+
+
+TODO:
+Check out slurm script and make sure the current image is in the right place
+Make /scratch directory visible for singularity
+  give the image the filepath so it can access directories
+
+
+
+Create image for tensorflow
+
+We can only use `output_image.sif` as the name for the singularity image when creating. 
+Afterwards you can change the name of your .sif file to whatever you desire using mv
+
+Same thing with build.def ^^
+
+TODO: update infomall documenation on singularity image
+
+
+
+
+python
+python> import tensorflow
+python> print(tensorflow.__version__)
+python> exit
+
+or
+
+python -c "import tensorflow; print(tensorflow.__version__)"
+---
+
+This will prompt several lines that may look familiar to this: (note that the ##### is in reference to a unique jobid)
+
+```
+salloc: Pending job allocation ##### 
+salloc: job ##### queued and waiting for resources
+salloc: job ##### has been allocated resources
+salloc: Granted job allocation #####
+```
+
+It should only take a minute or two for the job to start, but once the job has started execute the following line:
+
+```bash
+rivanna> singularity pull docker://sfarrell/cosmoflow-gpu:mlperf-v1.0
+rivanna> mv cosmoflow-gpu_mlperf-v1.0.sif /scratch/$USER/.singularity
+``` 
+
+The download time will be about 15 minutes.
+
+---
+As a side note, if you are using an interactive job, please be sure to exit as soon as the sif image downloads to ensure that you are not charged for unused time. Exiting an interactive job can be as simple as:
+
+```bash
+rivanna> exit
+```
+
+which should print the following message
+
+```
+salloc: Relinquishing job allocation ##### (unique job id)
+```
 
 # Writing a Slurm Script
 
@@ -186,41 +296,30 @@ rivanna> ln -s $PROJECT/hpc/cosmoflow $PROJECT/mlcommons-cosmoflow/.
 rivanna> cd $PROJECT
 rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-data
 
-rivanna> cd ..
-rivanna> cp /scratch/$USER/mlcommons/builds/build.def /scratch/$USER/
-rivanna> sudo /opt/singularity/3.7.1/bin/singularity build output_image.sif build.def
-rivanna> mv output_image.sif cosmoflow.sif
+rivanna> mkdir /scratch/$USER/.singularity
+rivanna> ln -s /scratch/$USER/.singularity ~/.singularity
+rivanna> export USER_CONTAINER_DIR=/scratch/$USER/.singularity
+rivanna> cd $USER_CONTAINER_DIR
+rivanna> module load singularity
+rivanna> ijob -c 1 -p largemem --time=1-00:00:00
+rivanna> singularity pull docker://sfarrell/cosmoflow-gpu:mlperf-v1.0
+rivanna> exit
 
 rivanna> mkdir -p $PROJECT/results
 rivanna> cd $PROJECT/results
 rivanna> sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-cori-rivanna.slurm
 rivanna> squeue -u $USER
+
 ```
 
-# Rivanna hardware desc
-
-| Cores/Node | Memory/Node | Specialty Hardware | GPU memory/Device | GPU devices/Node | # of Nodes |
-|------------|-------------|--------------------|-------------------|-----------------|------------|
-| 40         | 354GB       | -                  | -                 | -               | 1          |
-| 20         | 127GB       | -                  | -                 | -               | 115        |
-| 28         | 255GB       | -                  | -                 | -               | 25         |
-| 40         | 384GB       | -                  | -                 | -               | 347        |
-| 40         | 768GB       | -                  | -                 | -               | 35         |
-| 16         | 1000GB      | -                  | -                 | -               | 4          |
-| 48         | 1500GB      | -                  | -                 | -               | 6          |
-| 128        | 1000GB      | GPU: A100          | 40GB              | 8               | 2          |
-| 128        | 2000GB      | GPU: A100          | 80GB              | 8               | 11         |
-| 28         | 255GB       | GPU: K80           | 11GB              | 8               | 8          |
-| 28         | 255GB       | GPU: P100          | 12GB              | 4               | 4          |
-| 40         | 383GB       | GPU: RTX2080Ti     | 11GB              | 10              | 2          |
-| 64         | 128GB       | GPU: RTX3090       | 24GB              | 4               | 5          |
-| 28         | 188GB       | GPU: V100          | 16GB              | 4               | 1          |
-| 40         | 384GB       | GPU: V100          | 32GB              | 4               | 12         |
-| 36         | 384GB       | GPU: V100          | 32GB              | 4               | 2          |
 
 
 
-# Current TODO section
+
+
+
+
+
 
 TODO:
 mnist in cybertraining to test image before waiting for train.py in cosmoflow
@@ -229,12 +328,3 @@ look
 
 
 -side task: update this documentation to my current progress and flow.
-
-
-Build def file
-TODO: test using
-pip install horovod[tensorflow,keras,pytorch,mxnet,spark]
-    -submit ticket to ask about this if it fails
-
-
-build def for mnist and make sure using gpu and singularity image
