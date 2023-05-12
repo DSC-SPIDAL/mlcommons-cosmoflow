@@ -1,44 +1,47 @@
 #!/bin/bash
-
-#SBATCH --time=30
-#SBATCH --job-name=train-cosmoflow
+#SBATCH --time=30:00
+#SBATCH --job-name=gpu-v100-train-cosmoflow
 #SBATCH --output=%u-%j.out
 #SBATCH --error=%u-%j.err
 #SBATCH -c 4
 #SBATCH --partition=bii-gpu
-#SBATCH --reservation=bi_fox_dgx
 #SBATCH --account=bii_dsc_community
-#SBATCH --constraint=a100_80gb
 #SBATCH --mem=32GB
-#SBATCH --gres=gpu:a100:1
+#SBATCH --gres=gpu
 
-module load anaconda
-conda -V    # 4.9.2
-anaconda -V # 1.7.2
-conda create -n COSMOFLOW python=3.8
-conda activate COSMOFLOW
-pip install -r requirements.txt
+hostname
+echo "SLURM_CPUS_ON_NODE: $SLURM_CPUS_ON_NODE"
+echo "SLURM_CPUS_PER_GPU: $SLURM_CPUS_PER_GPU"
+echo "SLURM_GPU_BIND: $SLURM_GPU_BIND"
+echo "SLURM_JOB_ACCOUNT: $SLURM_JOB_ACCOUNT"
+echo "SLURM_JOB_GPUS: $SLURM_JOB_GPUS"
+echo "SLURM_JOB_ID: $SLURM_JOB_ID"
+echo "SLURM_JOB_PARTITION: $SLURM_JOB_PARTITION"
+echo "SLURM_JOB_RESERVATION: $SLURM_JOB_RESERVATION"
+echo "SLURM_SUBMIT_HOST: $SLURM_SUBMIT_HOST"
 
-export PROJECT=/project/bii_dsc_community/$USER/cosmoflow
-export OMP_NUM_THREADS=32
-export KMP_BLOCKTIME=1
-export KMP_AFFINITY="granularity=fine,compact,1,0"
-export HDF5_USE_FILE_LOCKING=FALSE
+module purge
+module load singularity
 
-set -x
-srun -l -u python $PROJECT/mlcommons-cosmoflow/cosmoflow/train.py \
-    --config=$PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo.yaml \
-    --kmp-blocktime=$KMP_BLOCKTIME \
-    --kmp-affinity=$KMP_AFFINITY \
-    --omp-num-threads=$OMP_NUM_THREADS \
-    -d $@
+nvidia-smi
 
-## documentation to set up srun statements so I dont have
-## to keep modifying the train.py file
+export RUN_DIR=/scratch/$USER
+export IMAGE=/$RUN_DIR/cosmoflow/mlcommons-cosmoflow/scripts/rivanna/cosmoflow.sif
+export SCRIPT_DIR=$RUN_DIR/cosmoflow/hpc
+export PROJECT=$RUN_DIR/cosmoflow
 
-## What does the -d do? look into
-## --config=../configs/cosmo.yaml to specify configs
-## -d could do a couple of things:
-## specify a debug level or specify dependencies,
-## the $@ is every command line argument given to the shell
+#cms gpu system
+#cms gpu status
+#cms gpu count
+#cms gpu watch --gpu=0 --delay=1 --dense > gpu0.log &
+
+cd $RUN_DIR
+ls -lisa
+ls -lisa $SCRIPT_DIR/cosmoflow/train.py
+ls -lisa $PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml
+
+singularity exec --nv $IMAGE python $SCRIPT_DIR/cosmoflow/train.py $PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml
+
+
+
 

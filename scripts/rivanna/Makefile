@@ -1,12 +1,25 @@
-#
-# Targets to fetch the data
-#
-
 PROJECT=/project/bii_dsc_community/$(USER)/cosmoflow
 RESULT=$(PROJECT)/result
 DATA=/$(PROJECT)/data
 #PROJECT=/scratch/$(USER)/cosmoflow
 #DATA=/scratch/$(USER)/cosmoflow/data
+
+BUILD=cosmoflow.def
+IMAGE=cosmoflow.sif
+
+image:
+	cp ${BUILD} build.def
+	sudo /opt/singularity/3.7.1/bin/singularity build output_image.sif build.def
+	cp output_image.sif ${IMAGE}
+	make -f Makefile clean
+clean:
+	rm -rf build.def output_image.sif
+delete:
+	rm -rf *.err *.out
+run:
+	sbatch train-gpu.slurm
+shell:
+	singularity shell ${IMAGE}
 
 info:
 	echo "user:" $(USER)
@@ -16,8 +29,6 @@ create-data-dir:
 	mkdir -p $(DATA)
 
 get-data: get-small-data get-large-data
-
-
 
 get-small-data: create-data-dir
 	cd $(DATA); \
