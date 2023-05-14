@@ -1,29 +1,47 @@
-PROJECT=/project/bii_dsc_community/$(USER)/cosmoflow
 RESULT=$(PROJECT)/result
 DATA=/$(PROJECT)/data
-#PROJECT=/scratch/$(USER)/cosmoflow
+PROJECT=/scratch/$(USER)/cosmoflow
 #DATA=/scratch/$(USER)/cosmoflow/data
 
 BUILD=cosmoflow.def
 IMAGE=cosmoflow.sif
+
 
 image:
 	cp ${BUILD} build.def
 	sudo /opt/singularity/3.7.1/bin/singularity build output_image.sif build.def
 	cp output_image.sif ${IMAGE}
 	make -f Makefile clean
+
+
 clean:
 	rm -rf build.def output_image.sif
+
+
 delete:
 	rm -rf *.err *.out
+
+
 run:
 	sbatch train-gpu.slurm
+
+
 shell:
 	singularity shell ${IMAGE}
+
 
 info:
 	echo "user:" $(USER)
 	echo "project:" $(PROJECT)
+
+
+out:
+	cat *.out
+
+err:
+	cat *.err
+
+
 
 create-data-dir:
 	mkdir -p $(DATA)
@@ -42,7 +60,7 @@ get-large-data: create-data-dir
 	cd $(DATA); \
 	time tar -xvf cosmoUniverse_2019_05_4parE_tf_v2.tar
 
-squeue:
+stat:
 	squeue -u $(USER)
 
 run-small-data:

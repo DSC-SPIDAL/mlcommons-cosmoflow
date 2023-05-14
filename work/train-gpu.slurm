@@ -26,7 +26,7 @@ module load singularity
 nvidia-smi
 
 export RUN_DIR=/scratch/$USER
-export IMAGE=/$RUN_DIR/cosmoflow/mlcommons-cosmoflow/scripts/rivanna/cosmoflow.sif
+export IMAGE=/$RUN_DIR/cosmoflow/mlcommons-cosmoflow/work/cosmoflow.sif
 export SCRIPT_DIR=$RUN_DIR/cosmoflow/hpc
 export PROJECT=$RUN_DIR/cosmoflow
 
