@@ -11,12 +11,13 @@ From: /share/resources/containers/singularity/tensorflow-2.10.0.sif
 	pip install cmake
 	pip install wandb
 	pip install horovod
-        pip install numpy
-        pip install matplotlib
-        pip install pandas
-        pip install scikit-learn
+    pip install numpy
+    pip install matplotlib
+    pip install pandas
+    pip install scikit-learn
 	pip install cloudmesh-common
-        pip install cloudmesh-gpu
+    pip install cloudmesh-gpu
+	pip install --no-cache-dir "git+https://github.com/mlcommons/logging.git"
 
 
 
