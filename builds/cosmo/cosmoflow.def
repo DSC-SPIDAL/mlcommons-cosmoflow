@@ -1,0 +1,22 @@
+#BootStrap: docker
+#From: tensorflow/tensorflow:latest-gpu-py3
+
+Bootstrap: localimage
+From: /share/resources/containers/singularity/tensorflow-2.10.0.sif
+
+%post
+	apt update -y
+	apt install build-essential -y
+	pip install pip -U
+	pip install cmake
+	pip install wandb
+	pip install horovod
+        pip install numpy
+        pip install matplotlib
+        pip install pandas
+        pip install scikit-learn
+	pip install cloudmesh-common
+        pip install cloudmesh-gpu
+
+
+
