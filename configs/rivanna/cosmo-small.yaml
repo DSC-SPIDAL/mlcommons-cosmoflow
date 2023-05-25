@@ -1,4 +1,4 @@
-output_dir: results/cosmo_small
+output_dir: /scratch/$USER/cosmoflow/results
 
 mlperf:
     org: LBNL
@@ -9,8 +9,9 @@ mlperf:
 data:
     name: cosmo
     compression: GZIP
-    n_train: 524288
-    n_valid: 65536
+    data_dir: /scratch/$USER/cosmoflow/mlcommons-cosmoflow/data/cosmoUniverse_2019_05_4parE_tf_v2_mini
+    n_train: 1025
+    n_valid: 1025
     sample_shape: [128, 128, 128, 4]
     batch_size: 4
     n_epochs: 128
@@ -49,7 +50,7 @@ lr_schedule:
 train:
     loss: mse
     metrics: ['mean_absolute_error']
-    #early_stopping_patience: 8
+    early_stopping_patience: 8
 
     # Uncomment to stop at target quality
-    #target_mae: 0.124
+    target_mae: 0.124

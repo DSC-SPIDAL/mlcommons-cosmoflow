@@ -1,13 +1,15 @@
 #!/bin/bash
-#SBATCH --time=30:00
-#SBATCH --job-name=gpu-v100-train-cosmoflow
+#SBATCH --time=4:00:00
+#SBATCH --job-name=train-gpu-cosmoflow
 #SBATCH --output=%u-%j.out
 #SBATCH --error=%u-%j.err
-#SBATCH -c 4
+
+#SBATCH -N 4
+#SBATCH -c 16
 #SBATCH --partition=bii-gpu
 #SBATCH --account=bii_dsc_community
 #SBATCH --mem=32GB
-#SBATCH --gres=gpu
+#SBATCH --gres=gpu:4
 
 hostname
 echo "SLURM_CPUS_ON_NODE: $SLURM_CPUS_ON_NODE"

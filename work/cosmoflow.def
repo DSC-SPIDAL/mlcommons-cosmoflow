@@ -10,15 +10,15 @@ From: /share/resources/containers/singularity/tensorflow-2.10.0.sif
 	apt-get install -y git
 	pip install pip -U
 	pip install pandas 
-	pip install wandb
-	
+	pip install wandb	
 	pip install --no-cache-dir "git+https://github.com/mlcommons/logging.git"
-
 	pip install cmake
 	pip install horovod
         pip install numpy
         pip install matplotlib
         pip install scikit-learn
+	pip install pyyaml
+
 	pip install cloudmesh-common
         pip install cloudmesh-gpu
 
