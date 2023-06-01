@@ -1,4 +1,4 @@
-output_dir: /project/bii_dsc_community/uja2wd/cosmoflow/results/cosmo_large
+output_dir: /scratch/uja2wd/cosmoflow/results/large
 
 mlperf:
     org: LBNL
@@ -50,7 +50,7 @@ lr_schedule:
 train:
     loss: mse
     metrics: ['mean_absolute_error']
-    #early_stopping_patience: 8
+    early_stopping_patience: 8
 
     # Uncomment to stop at target quality
-    #target_mae: 0.124
+    target_mae: 0.124

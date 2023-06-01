@@ -5,7 +5,7 @@
 #SBATCH --error=%u-%j.err
 
 #SBATCH -N 4
-#SBATCH -c 16
+#SBATCH -c 12
 #SBATCH --partition=bii-gpu
 #SBATCH --account=bii_dsc_community
 #SBATCH --mem=32GB
