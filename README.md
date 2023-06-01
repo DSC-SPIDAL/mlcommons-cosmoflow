@@ -9,7 +9,7 @@ This readme file will hopefully guide you, in order to setup your environment in
 
 # Setup the Project Directory
 
-To start, we begin by cloning the contents of hpc cosmoflow into our system using the following steps:
+To start, we begin by cloning the contents of the hpc cosmoflow repo and this current mlcommons repo into our system using the following steps:
 
 ```bash
 rivanna> export PROJECT=/scratch/$USER/cosmoflow
@@ -29,33 +29,125 @@ The data for the program is located at
 
 * <https://portal.nersc.gov/project/dasrepo/cosmoflow-benchmark/>
 
-We have provided a convenient way to download the data via a Makefile. 
+We recommend downloading the data via `globus` using the command line into a new directory titled `data` in your `$PROJECT` directory. The following tutorial steps are directly excerpted from [README-globus.md](https://infomall.org/uva/docs/tutorial/globus/). 
+* NOTE: the linked tutorial assumes that the data dir created is in `/project/bii_dsc_community/...` instead of `/scratch/$USER/cosmoflow`
 
-We will download two data sets, a small and a large one. To download both using the aforementioned Makefile we will run a variation of the following command.
+## Globus Set Up on Rivanna
 
-```bash
-rivanna> time make get-data
+Rivanna allows to load the Globus file transfer command line tools via the modules command with the following commands. However, Prior to executing globus login, please visit <https://www.globus.org/> and log in using your UVA credentials. 
+
+```bash 
+module load globus_cli
+globus login
 ```
 
-However, we recommend running this modified command in your project directory.
+The `globus login` method will output a unique link per user that you should paste into a web browser and sign in with using your UVA credentials. Afterwords, the website will present you with a unique sign-in key that you will need to paste back into the command line to verify your login. 
 
-NOTE: get large data takes a while, we have documented how to only download the small dataset below
+After executing `globus login` your console should look like the following block. 
 
-```bash
-rivanna> cd $PROJECT
-rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-data
+* NOTE: this is a unique link generated for when I attempted to login, each user will have a different link.
+
+```
+-bash-4.2$globus login
+Please authenticate with Globus here:
+------------------------------------
+https://auth.globus.org/v2/oauth2/authorize?client_id=affbecb5-5f93-404e-b342-957af296dea0&redirect_uri=https%3A%2F%2Fauth.globus.org%2Fv2%2Fweb%2Fauth-code&scope=openid+profile+email+urn%3Aglobus%3Aauth%3Ascope%3Aauth.globus.org%3Aview_identity_set+urn%3Aglobus%3Aauth%3Ascope%3Atransfer.api.globus.org%3Aall&state=_default&response_type=code&access_type=offline&prompt=login
+------------------------------------
+
+Enter the resulting Authorization Code here:
 ```
 
+Follow the url and input the authorization code to login successfully.
+
+## Source Endpoint Search
+
+First, verify that you were able to sign in properly, and verify your identity and then search for the 
+source endpoint of the data you want to transfer. In this example, our endpoint is named `CosmoFlow benchmark data cosmoUniverse_2019_02_4parE`. The following commands will verify your sign in identity and then search for an endpoint within the single quotation marks.
+
+```bash
+globus get-identities -v 'youremail@gmailprobably.com'
+globus endpoint search 'CosmoFlow benchmark data cosmoUniverse_2019_02_4parE'
+```
+
+Each globus endpoint has a unique endpoint ID. In this case our source endpoint ID is:
+
+* `d0b1b73a-efd3-11e9-993f-0a8c187e8c12`
+
+Set up a variable `ENDPOINT` so you can use the endpoint more easily without retyping it. 
+Also set a variable `SRC_FILE` to indicate the directory with the files to be transferred.
+
+```bash
+export SRC_ENDPOINT=d0b1b73a-efd3-11e9-993f-0a8c187e8c12
+export SRC_PATH=/~/
+```
+
+You can look at the files in the globus endpoint using `globus ls` to verify that you are looking at the right endpoint.
+
+```bash
+globus ls $SRC_ENDPOINT
+```
+
+## Destination Endpoint Set Up
+
+Rivanna HPC has set a special endpoint for data transfers into the `/project`, `/home`, or `/scratch` directories. The name of our destination endpoint will be `UVA Standard Security Storage`.
+
+Repeat the above steps with this endpoint and set up the variables including a `path` variable with the desired path to write to.
+
+```bash
+globus endpoint search 'UVA Standard Security Storage'
+export DEST_ENDPOINT=e6b338df-213b-4d31-b02c-1bc2c628ca07
+export DEST_DIR=/dtn/landings/users/u/uj/$USER/project/bii_dsc_community/uja2wd/cosmoflow/
+```
+
+* NOTE: to find the specific path of where to write to, it is best to sign into the web format of globus and find your desired path variable. 
+    * First sign into the web format of globus
+    * Locate `file manager` on the left side of the screen
+    * In the `collections` box at the top of the screen begin to search for `UVA Standard Security Storage`
+    * Select our destination endpoint
+    * Use the GUI tool to select exactly where you wish to write to
+    * Copy the path from the box immedietally below `collections`
+    * Write this value to the DEST_DIR variable created above (I have included my path to where I wish to write to)
+
+## Initiate the Transfer
+
+Finally, execute the transfer
+
+```bash
+globus transfer $SRC_ENDPOINT:$SRC_PATH $DEST_ENDPOINT:$DEST_DIR
+```
+
+* NOTE: I anticipate for your first transfer that you will run into an issue where you need to give globus permission to initiate transfers via the CLI instead of via the web tool. I was given the unique command as follows by my terminal:
+
+```bash
+-bash-4.2$globus transfer $SRC_ENDPOINT:$SRC_PATH $DEST_ENDPOINT:$DEST_DIR
+The collection you are trying to access data on requires you to grant consent for the Globus CLI to access it.
+message: Missing required data_access consent
+
+Please run
+
+  globus session consent 'urn:globus:auth:scope:transfer.api.globus.org:all[*https://auth.globus.org/scopes/e6b338df-213b-4d31-b02c-1bc2c628ca07/data_access]'
+
+to login with the required scopes
+```
+
+After initiating this command, a similar sign in a verification will be conducted compared to the `globus login` method where the cli will output a url to follow, the user will sign in, and return a verification code.
+
+After fixing this, remember to re-initiate the transfer with the above `globus transfer` command.
+
+## Managing Tasks
+
+To monitor the status of active transfers, use 
+
+```bash
+globus task list
+```
+
+or similarly you can use the web tool to verify transfers. 
+
+
 ---
-
-Conversely, it may be easier to do this transfer via the globus cli, for which the documentation is included on the uva infomall.
-
----
-
-Once the make file targets are uncompressed you will find the data in the directory 
-
-* small data is in: `cosmoUniverse_2019_05_4parE_tf_small`
-* large data is in: `cosmoUniverse_2019_05_4parE_tf`
+* NOTE: In our tests we found that downloading both datasets took 4 hours and 42 minutes. Then, in order to uncompress the `.tar` files, the mini dataset took approximately 15 minutes while the larger dataset took ? hours. Keep this in mind when getting the data.
+* NOTE: Also the small dataset is about 6 gb compressed and 12 gb uncompressed whereas the large dataset is 1.6 tb compressed and ? uncompressed.
 
 # Info on Running Scripts
 
@@ -91,21 +183,18 @@ To make the image we will be using a special node provided by Rivanna `biihead1.
 
 * To access it remember to use `ssh $USER@biihead1.bii.virginia.edu`
 
-Then while standing in your `/scratch/$USER/` directory make sure to create a copy of the supplied file in the mlcommons-cosmoflow repo that cound be found in `/builds/build.def` into a new file that MUST be named `build.def`.
+When you cloned the `mlcommons-cosmoflow` there should be a subdirectory called `work` which contains the `cosmoflow.def` file that serves as the build.def file for the image we create in order to run the several scripts inside of `work`
 
-Then run the following command to create an image titled `output_image.sif`:
-
-```bash rc
-rivanna> sudo /opt/singularity/3.7.1/bin/singularity build output_image.sif build.def
-```
-
-Make sure to rename the image to something that makes more sense for readability.
+Luckily everything inside the `work` directory is automated via the included makefile so to create an image titled `cosmoflow.sif` we simply need to say: 
 
 ```bash rc
-rivanna> mv output_image.sif cosmoflow.sif
+make image
 ```
 
-As a side note, make sure to exit the special `biihead` node after you are no longer creating images.
+---
+
+* NOTE: It takes around 5-10 minutes to create an image.
+* NOTE: Make sure to exit the special `biihead` node after you are no longer creating images.
 
 # Writing a Slurm Script
 
@@ -149,31 +238,38 @@ Make sure to update the variables in the example script including where your `.s
 
 # Submitting a Slurm Script
 
-When submitting a slurm script, it is possible to designate several configurations, usually done so through a `.yaml` file found in `configs`>`rivanna`>`cosmo.yaml` in the mlcommons repository. The `train.py` script will by default designate `cosmo.yaml` as its config.
-
-Moving on, in order to submit a slurm script, navigate to the `$PROJECT` directory and then execute the following instructions to create a results subdirectory under `$PROJECT`.
+When submitting a slurm script, it is possible to designate several configurations, usually done so through a `.yaml` file found in `configs`>`rivanna`>`cosmo.yaml` in the mlcommons repository. The `train.py` script will by default designate `cosmo.yaml` as its config, So we have created a `cosmo-large.yaml` and a `cosmo-small.yaml` file that designates the results directory and data directory. To create said results directory execute the following line:
 
 ```bash
 rivanna> mkdir -p $PROJECT/results
-rivanna> cd $PROJECT/results
 ```
 
-scripts can be submitted by adding them to the `scripts`>`rivanna` folder and calling them via the linux command line. For example to call `train-cori-rivanna.slurm`, from the results sub-directory execute the following command:
+scripts can be submitted by navigating to the `work` directory inside of `/scratch/$USER/cosmoflow/mlcommons-cosmoflow/work` and simply running: 
 
-```bash
-rivanna> sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-cori-rivanna.slurm
-rivanna> squeue -u $USER
+```bash rc
+make run
 ```
 
-TODO: include a block about what the results are
+The above line will submit `train-gpu.slurm` which runs the large dataset on whichever gpu is most readily available. To run another script specified such as `train-gpu-a100-large.slurm` simply run the following command followed by whatever script you want to run
+
+```bash rc
+sbatch train-gpu-a100-large.slurm
+```
 
 If all goes well you can do an `ls` to see the contents of the results directory. Usually a file ending with `.err` indicates that something went wrong and opening the file will allow you to read the error message and debug accordingly.
 
 Otherwise, the job should print a results file which you can also open.
 
+To view the status of your job within the `work` directory, the makefile includes `make stat` to display the users current jobs, `make delete` to delete all `.err` and `.out` files in the current directory, and as previously mentioned `make run` to submit the `train-gpu` script.
+
+---
+* NOTE: After running train-gpu-small.slurm with 1 node, 8 cores, and 4 gpus on the small dataset, the prg took about 6 hours to complete.
+
 # Final Code View
 
 If you are testing for replicability the main steps are to run these lines of code in succession:
+
+
 
 ```bash
 rivanna> export PROJECT=/scratch/$USER/cosmoflow
@@ -184,17 +280,15 @@ rivanna> git clone https://github.com/mlcommons/hpc.git
 rivanna> ln -s $PROJECT/hpc/cosmoflow $PROJECT/mlcommons-cosmoflow/.
 
 rivanna> cd $PROJECT
-rivanna> make -f mlcommons-cosmoflow/scripts/rivanna/Makefile get-data
+rivanna> mkdir -p data
+rivanna> cd data
 
-rivanna> cd ..
-rivanna> cp /scratch/$USER/mlcommons/builds/build.def /scratch/$USER/
-rivanna> sudo /opt/singularity/3.7.1/bin/singularity build output_image.sif build.def
-rivanna> mv output_image.sif cosmoflow.sif
+(Globus transfer)
+(Un tar datasets)
 
-rivanna> mkdir -p $PROJECT/results
-rivanna> cd $PROJECT/results
-rivanna> sbatch $PROJECT/mlcommons-cosmoflow/scripts/rivanna/train-cori-rivanna.slurm
-rivanna> squeue -u $USER
+rivanna> cd $PROJECT/mlcommmons-cosmoflow/work
+rivanna> make image
+rivanna> sbatch train-gpu-small.slurm
 ```
 
 # Rivanna hardware desc
@@ -218,23 +312,6 @@ rivanna> squeue -u $USER
 | 40         | 384GB       | GPU: V100          | 32GB              | 4               | 12         |
 | 36         | 384GB       | GPU: V100          | 32GB              | 4               | 2          |
 
-
-
 # Current TODO section
 
-TODO:
-mnist in cybertraining to test image before waiting for train.py in cosmoflow
-  -test singularity
-look
-
-
--side task: update this documentation to my current progress and flow.
-
-
-Build def file
-TODO: test using
-pip install horovod[tensorflow,keras,pytorch,mxnet,spark]
-    -submit ticket to ask about this if it fails
-
-
-build def for mnist and make sure using gpu and singularity image
+Update time to uncompress larger dataset
