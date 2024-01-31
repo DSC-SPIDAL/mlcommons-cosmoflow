@@ -21,7 +21,8 @@ echo "SLURM_JOB_RESERVATION: $SLURM_JOB_RESERVATION"
 echo "SLURM_SUBMIT_HOST: $SLURM_SUBMIT_HOST"
 
 module purge
-module load singularity
+module load apptainer
+source /scratch/$USER/ENV3
 
 nvidia-smi
 
@@ -40,7 +41,7 @@ ls -lisa
 ls -lisa $SCRIPT_DIR/cosmoflow/train.py
 ls -lisa $PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml
 
-singularity exec --nv $IMAGE python $SCRIPT_DIR/cosmoflow/train.py $PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml
+apptainer exec --nv $IMAGE python $SCRIPT_DIR/cosmoflow/train.py $PROJECT/mlcommons-cosmoflow/configs/rivanna/cosmo-large.yaml
 
 
 
